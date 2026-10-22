@@ -5,6 +5,7 @@ import { useActionState, useEffect, useRef, useState, useSyncExternalStore, type
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { submitEnquiry } from "@/app/actions/enquiry";
 import { buttonClasses } from "@/components/ui/button";
+import { FormField, inputClasses } from "@/components/ui/form-field";
 import { enquiryOptions } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
 import { getContactEmail, getWhatsAppUrl } from "@/lib/contact";
@@ -17,43 +18,8 @@ import {
   type EnquiryField,
 } from "@/lib/enquiry";
 
-const inputClasses =
-  "block w-full rounded-lg border border-ink/20 bg-card px-3.5 py-3 text-base text-ink placeholder:text-muted/70 transition-colors hover:border-ink/40 focus:border-ink focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent aria-[invalid=true]:border-danger";
-
-function Field({
-  id,
-  label,
-  optional,
-  error,
-  hint,
-  children,
-}: {
-  id: EnquiryField;
-  label: string;
-  optional?: boolean;
-  error?: string;
-  hint?: string;
-  children: ReactNode;
-}) {
-  return (
-    <div>
-      <label htmlFor={`enquiry-${id}`} className="mb-2 flex items-baseline justify-between gap-3 text-sm font-semibold text-ink">
-        {label}
-        {optional && <span className="text-xs font-normal text-muted">Optional</span>}
-      </label>
-      {children}
-      {hint && !error && (
-        <p id={`enquiry-${id}-hint`} className="mt-1.5 text-xs text-muted">
-          {hint}
-        </p>
-      )}
-      {error && (
-        <p id={`enquiry-${id}-error`} className="mt-1.5 text-sm text-danger">
-          {error}
-        </p>
-      )}
-    </div>
-  );
+function Field(props: { id: EnquiryField; label: string; optional?: boolean; error?: string; hint?: string; children: ReactNode }) {
+  return <FormField prefix="enquiry" {...props} />;
 }
 
 const subscribeNoop = () => () => {};

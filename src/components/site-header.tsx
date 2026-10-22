@@ -14,7 +14,7 @@ export const navLinks = [
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/92 backdrop-blur-md supports-[not(backdrop-filter:blur(0))]:bg-paper">
+    <header className="sticky top-0 z-40 print:hidden border-b border-ink/10 bg-paper/92 backdrop-blur-md supports-[not(backdrop-filter:blur(0))]:bg-paper">
       <div className="container-page flex h-16 items-center justify-between gap-6">
         <Link href="/" className="shrink-0" aria-label="Hafiz MJ Digital, home">
           <Wordmark />

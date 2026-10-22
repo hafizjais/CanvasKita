@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { credentials } from "@/data/content";
 import { track } from "@/lib/analytics";
@@ -47,13 +46,15 @@ export function About() {
             </p>
             <p>
               I also run{" "}
-              <Link
-                href="/work/financial-hafiz"
+              <a
+                href="https://financialhafiz.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-medium text-ink underline decoration-accent decoration-1 underline-offset-4 hover:decoration-2"
-                {...track("project_click", { project: "financial-hafiz", target: "case_study" })}
+                {...track("project_click", { project: "financial-hafiz", target: "live_site" })}
               >
-                Financial Hafiz
-              </Link>
+                Financial Hafiz<span className="sr-only"> (opens in a new tab)</span>
+              </a>
               , my own financial-services landing page, so I see websites from a business owner&rsquo;s side too. A page
               has to earn the enquiry, not just look good.
             </p>

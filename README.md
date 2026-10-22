@@ -12,6 +12,7 @@ Requires Node.js 20.9 or newer.
 npm install          # install dependencies
 npm run dev          # development server on http://localhost:3000
 npm run lint         # ESLint
+npm test             # pricing calculation unit tests (Node's built-in runner)
 npx tsc --noEmit     # type check
 npm run build        # production build
 npm start            # serve the production build
@@ -29,10 +30,38 @@ Everything a visitor uses to contact you lives in **`src/config/site.ts`**. Empt
 | Social profiles | `siteConfig.social` | Full `https://` URLs. Empty entries are hidden. |
 | Production URL | `NEXT_PUBLIC_SITE_URL` env var | Enables canonical URLs, sitemap and indexing (see [SEO](#seo-and-indexing)). |
 | Form delivery | env vars | See [Enquiry form delivery](#enquiry-form-delivery). **Until this is set, the form tells visitors their message was not sent.** |
-| Your role per project | `contribution` in `src/data/projects.ts` | Empty until you confirm it. The "My role" details are hidden while empty. |
 | Project relationship | `relationship` in `src/data/projects.ts` | `"client"`, `"own"` or `"unconfirmed"`. Financial Hafiz is `"own"`; the others are `"unconfirmed"` and show no label. |
 
 Content that is likely to change (services, benefits, process steps, FAQs, credentials, testimonials) is in **`src/data/content.ts`**. Enquiry form options (website types, budget ranges, timelines) are in `enquiryOptions` in `src/config/site.ts`.
+
+## Packages and the price estimator
+
+The homepage Services section shows six website packages. The estimator at **`/get-quote`** lets visitors configure a package and see an itemised estimate in MYR, print it or save it as a PDF, send it on WhatsApp, or submit it as an enquiry. No contact details are needed to see a price.
+
+**To change prices, edit `src/config/pricing.ts`.** It is the only place figures live:
+
+| What | Setting |
+| --- | --- |
+| Package starting prices, included pages/products, page limits, indicative timelines | `pricing.packages` |
+| Add-on prices (`fixed`, `percent` of base, or `monthly`), which packages offer them, page limits | `pricing.addOns` |
+| Extra page price | `pricing.extraPagePrice` |
+| Extra product listings (block size, price, maximum) | `pricing.extraProducts` |
+| Expedited delivery percentage and availability | `pricing.expedited` |
+| Features already included in a package (never charged twice) | `includedAddOns` on each package |
+| Estimate validity, reference prefix, revisions, post-launch support | `pricing.estimate` |
+| Exclusions and assumptions printed on the estimate | `pricing.exclusions`, `pricing.assumptions` |
+
+Card wording, feature lists and images are in `src/data/packages.ts`. After changing prices, run `npm test`. A few tests check today's figures (for example RM1,900 for a business website), so update them when you change those prices.
+
+How estimates are calculated (`src/lib/quote/calculate.ts`):
+- Amounts are integer sen, so totals are exact.
+- Monthly maintenance is listed separately and never added to the project total. A first-year figure appears only when every one-time item has a fixed price.
+- Add-ons included in a package, or not offered for it, are removed before pricing.
+- Starting-price add-ons, and copywriting or SEO beyond five pages, make the total read "From …". Complex booking and advanced commerce needs are listed as "Quoted separately", with no price.
+- Custom systems never get a total. They show "Requires detailed quotation".
+- When an estimate enquiry is submitted, the server recalculates the estimate from the selected options, so prices sent from the browser are never trusted.
+
+Printing uses the browser's own dialog ("Save as PDF"). The printable layout is `src/components/quote/estimate-document.tsx`.
 
 ## Project structure
 
@@ -65,14 +94,11 @@ public/
 
 ## Adding or editing portfolio projects
 
-1. Add screenshots to `public/work/<slug>/`:
-   - `desktop.webp`: 1440×900 capture of the homepage
-   - `mobile.webp`: 780×1688 capture (390×844 at 2× pixel density)
-   - `desktop-full.webp`: 1200px-wide long capture (record its height)
-   - `og.jpg`: 1200×630 image for social sharing
+The "Selected work" section shows one card per project, and each card links to the live website.
+
+1. Add screenshots to `public/work/<slug>/`: `desktop.webp` (1440×900 capture of the homepage) and `mobile.webp` (780×1688, i.e. 390×844 at 2× pixel density).
 2. Add an entry to `projects` in `src/data/projects.ts`. Describe only what is visible on the live site; don't add results, figures or quotes you can't support.
-3. The new project automatically gets a case-study page, a footer link and a sitemap entry.
-4. The homepage "Selected Work" section lays out the four current projects by hand (`src/components/sections/selected-work.tsx`) to give each a distinct composition. To feature a new project there, add or swap an `<article>` block.
+3. The card and the footer link appear automatically. With an odd number of projects, the last card sits alone on its row.
 
 Screenshots were captured from the live sites on 19 October 2026. Re-capture them when a site changes significantly.
 
@@ -121,10 +147,12 @@ Tracked events (add each as a custom-event goal in Plausible to see it):
 | Event | Properties | Fired when |
 | --- | --- | --- |
 | `whatsapp_click` | `location` | Any WhatsApp button is clicked |
-| `project_click` | `project`, `target` (`case_study`/`live_site`) | A portfolio link is clicked |
+| `project_click` | `project`, `target` (`live_site`) | A portfolio link is clicked |
 | `cta_click` | `location`, `label` | Other calls to action (e.g. "Request a Quotation") |
 | `enquiry_start` | none | First interaction with the enquiry form |
 | `enquiry_submitted` | none | Successful form submission |
+| `quote_package_selected`, `quote_estimate_viewed`, `quote_printed` | `package` | Estimator usage |
+| `quote_enquiry_start`, `quote_enquiry_submitted` | none | Estimator enquiry form |
 
 Links are tracked through `data-track` attributes (see `track()` in `src/lib/analytics.ts`), so you can tag new links without turning them into client components. Check events in Plausible's real-time view after deploying; nothing is recorded before then.
 

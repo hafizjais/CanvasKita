@@ -3,7 +3,7 @@ import { siteConfig } from "@/config/site";
 import { isEmail, type EnquiryValues } from "@/lib/enquiry";
 
 /**
- * Sends an enquiry using whichever method is configured:
+ * Sends a form submission using whichever method is configured:
  *   1. Resend email API  (RESEND_API_KEY + ENQUIRY_TO_EMAIL [+ ENQUIRY_FROM_EMAIL])
  *   2. Webhook           (ENQUIRY_WEBHOOK_URL), e.g. Make, Zapier, n8n or a
  *                        Google Apps Script that writes to a sheet
@@ -12,34 +12,31 @@ import { isEmail, type EnquiryValues } from "@/lib/enquiry";
 
 export type DeliveryResult = { ok: true } | { ok: false; reason: "not_configured" | "failed" };
 
-const labels: Record<keyof EnquiryValues, string> = {
-  name: "Name",
-  business: "Business",
-  contact: "Contact",
-  websiteType: "Website needed",
-  message: "Project description",
-  budget: "Budget",
-  timeline: "Timeline",
+export type Submission = {
+  subject: string;
+  heading: string;
+  /** Label/value pairs for the email body. */
+  rows: [label: string, value: string][];
+  /** Flat JSON sent to the webhook. */
+  payload: Record<string, unknown>;
+  /** The visitor's contact detail; used as reply-to when it is an email address. */
+  contact: string;
 };
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
 }
 
-function asText(values: EnquiryValues) {
-  return (Object.keys(labels) as (keyof EnquiryValues)[])
-    .map((key) => `${labels[key]}: ${values[key] || "—"}`)
-    .join("\n");
-}
+const asText = (rows: Submission["rows"]) => rows.map(([label, value]) => `${label}: ${value || "—"}`).join("\n");
 
-function asHtml(values: EnquiryValues) {
-  const rows = (Object.keys(labels) as (keyof EnquiryValues)[])
+function asHtml(heading: string, rows: Submission["rows"]) {
+  const body = rows
     .map(
-      (key) =>
-        `<tr><td style="padding:6px 12px 6px 0;color:#5c5850;vertical-align:top">${labels[key]}</td><td style="padding:6px 0;white-space:pre-wrap">${escapeHtml(values[key] || "—")}</td></tr>`,
+      ([label, value]) =>
+        `<tr><td style="padding:6px 12px 6px 0;color:#5c5850;vertical-align:top">${escapeHtml(label)}</td><td style="padding:6px 0;white-space:pre-wrap">${escapeHtml(value || "—")}</td></tr>`,
     )
     .join("");
-  return `<h2 style="font-family:sans-serif">New project enquiry</h2><table style="font-family:sans-serif;font-size:15px;border-collapse:collapse">${rows}</table>`;
+  return `<h2 style="font-family:sans-serif">${escapeHtml(heading)}</h2><table style="font-family:sans-serif;font-size:15px;border-collapse:collapse">${body}</table>`;
 }
 
 export function isDeliveryConfigured() {
@@ -48,9 +45,9 @@ export function isDeliveryConfigured() {
   );
 }
 
-export async function deliverEnquiry(values: EnquiryValues): Promise<DeliveryResult> {
+export async function deliverSubmission(submission: Submission): Promise<DeliveryResult> {
   const { RESEND_API_KEY, ENQUIRY_TO_EMAIL, ENQUIRY_FROM_EMAIL, ENQUIRY_WEBHOOK_URL } = process.env;
-  const subject = `New enquiry: ${values.websiteType} — ${values.name}${values.business ? ` (${values.business})` : ""}`;
+  const { subject, heading, rows, payload, contact } = submission;
 
   try {
     if (RESEND_API_KEY && ENQUIRY_TO_EMAIL) {
@@ -60,10 +57,10 @@ export async function deliverEnquiry(values: EnquiryValues): Promise<DeliveryRes
         body: JSON.stringify({
           from: ENQUIRY_FROM_EMAIL || `${siteConfig.name} <onboarding@resend.dev>`,
           to: ENQUIRY_TO_EMAIL.split(",").map((email) => email.trim()),
-          reply_to: isEmail(values.contact) ? values.contact : undefined,
+          reply_to: isEmail(contact) ? contact : undefined,
           subject,
-          text: asText(values),
-          html: asHtml(values),
+          text: asText(rows),
+          html: asHtml(heading, rows),
         }),
         signal: AbortSignal.timeout(10_000),
       });
@@ -78,7 +75,7 @@ export async function deliverEnquiry(values: EnquiryValues): Promise<DeliveryRes
       const response = await fetch(ENQUIRY_WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subject, submittedAt: new Date().toISOString(), ...values }),
+        body: JSON.stringify({ subject, submittedAt: new Date().toISOString(), ...payload }),
         signal: AbortSignal.timeout(10_000),
       });
       if (!response.ok) {
@@ -93,4 +90,33 @@ export async function deliverEnquiry(values: EnquiryValues): Promise<DeliveryRes
   }
 
   return { ok: false, reason: "not_configured" };
+}
+
+const enquiryLabels: Record<keyof EnquiryValues, string> = {
+  name: "Name",
+  business: "Business",
+  contact: "Contact",
+  websiteType: "Website needed",
+  message: "Project description",
+  budget: "Budget",
+  timeline: "Timeline",
+};
+
+/** The general project enquiry form on the homepage. */
+export function deliverEnquiry(values: EnquiryValues) {
+  return deliverSubmission({
+    subject: `New enquiry: ${values.websiteType} — ${values.name}${values.business ? ` (${values.business})` : ""}`,
+    heading: "New project enquiry",
+    rows: (Object.keys(enquiryLabels) as (keyof EnquiryValues)[]).map((key) => [enquiryLabels[key], values[key]]),
+    payload: values,
+    contact: values.contact,
+  });
+}
+
+/** Honest wording when delivery isn't possible. */
+export function deliveryFailureMessage(reason: "not_configured" | "failed", hasAlternative: boolean) {
+  const alternative = hasAlternative ? "use one of the contact options below" : "try again later";
+  return reason === "not_configured"
+    ? `Online enquiries aren't connected yet, so your message wasn't sent. Please ${alternative}.`
+    : `Something went wrong and your message wasn't sent. Please try again, or ${alternative}.`;
 }

@@ -18,7 +18,7 @@ export function SiteFooter() {
   const socials = getSocialLinks();
 
   return (
-    <footer className="on-dark bg-ink text-on-dark">
+    <footer className="on-dark bg-ink text-on-dark print:hidden">
       <div className="container-page grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-4">
           <Wordmark tone="light" />
@@ -35,6 +35,11 @@ export function SiteFooter() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href="/get-quote" className="link-underline hover:text-on-dark">
+                Get an estimate
+              </Link>
+            </li>
           </ul>
         </nav>
 
@@ -43,9 +48,10 @@ export function SiteFooter() {
           <ul className="mt-4 space-y-2.5">
             {projects.map((project) => (
               <li key={project.slug}>
-                <Link href={`/work/${project.slug}`} className="link-underline">
+                <a href={project.url} target="_blank" rel="noopener noreferrer" className="link-underline">
                   {project.name}
-                </Link>
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
               </li>
             ))}
           </ul>

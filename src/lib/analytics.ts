@@ -4,10 +4,14 @@
  *
  * Events in use:
  * - whatsapp_click        { location }
- * - project_click         { project, target: "case_study" | "live_site" }
+ * - project_click         { project, target: "live_site" }
  * - cta_click             { location, label }
  * - enquiry_start         first interaction with the enquiry form
  * - enquiry_submitted     successful submission
+ * - quote_package_selected { package }   estimator: website type chosen
+ * - quote_estimate_viewed  { package }   estimator: estimate step reached
+ * - quote_printed          { package }   estimator: print / save as PDF
+ * - quote_enquiry_start / quote_enquiry_submitted   estimator enquiry form
  */
 
 type Props = Record<string, string>;

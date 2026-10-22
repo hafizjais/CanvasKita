@@ -10,21 +10,8 @@ export type Service = {
   includes: string[];
 };
 
+/** Services for existing websites, listed under the packages as "Also available". */
 export const services: Service[] = [
-  {
-    title: "Business Website Design & Development",
-    description:
-      "A professional multi-page website that explains what you do, who you help and how to get in touch.",
-    suitedTo: "Companies, consultants and service providers",
-    includes: ["Site structure & page planning", "Custom design", "Responsive build", "Contact & WhatsApp integration"],
-  },
-  {
-    title: "Landing Page Development",
-    description:
-      "A focused page built around one offer or campaign, designed to explain it clearly and encourage enquiries.",
-    suitedTo: "Campaigns, lead generation and single services",
-    includes: ["Offer-led copy structure", "Clear calls to action", "Enquiry or WhatsApp flow", "Fast loading on mobile"],
-  },
   {
     title: "Website Redesign",
     description:
@@ -33,16 +20,16 @@ export const services: Service[] = [
     includes: ["Review of the current site", "Clearer navigation", "Refreshed design", "Mobile improvements"],
   },
   {
-    title: "Website Maintenance & Updates",
+    title: "Maintenance & Updates",
     description:
-      "Practical ongoing support: content changes, small improvements and checks, within a scope we agree in advance.",
+      "Content changes, small improvements and routine checks, within a scope agreed in advance.",
     suitedTo: "Sites that need regular changes",
     includes: ["Content & image updates", "Small feature changes", "Routine checks", "Agreed scope & response"],
   },
   {
-    title: "Basic SEO & Performance Optimisation",
+    title: "SEO & Performance",
     description:
-      "Technical foundations that help search engines understand your site and help pages load quickly. Rankings are never guaranteed.",
+      "Technical foundations that help search engines understand your site and pages load quickly. Rankings are never guaranteed.",
     suitedTo: "New sites and slow or poorly structured sites",
     includes: ["Page titles & metadata", "Heading structure", "Image optimisation", "Speed improvements"],
   },

@@ -76,3 +76,7 @@ export function validateEnquiry(values: EnquiryValues): EnquiryErrors {
 export function isEmail(value: string) {
   return EMAIL.test(value);
 }
+
+export function isValidContact(value: string) {
+  return value.length <= limits.contact && (EMAIL.test(value) || PHONE.test(value));
+}

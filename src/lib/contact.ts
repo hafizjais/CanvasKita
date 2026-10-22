@@ -1,12 +1,9 @@
 import { siteConfig } from "@/config/site";
-
-const WHATSAPP_NUMBER = /^[1-9]\d{7,14}$/;
+import { buildWhatsAppUrl } from "@/lib/whatsapp";
 
 /** Returns a wa.me link, or null when no valid number is configured. */
 export function getWhatsAppUrl(message: string = siteConfig.contact.whatsappMessage) {
-  const number = siteConfig.contact.whatsappNumber.replace(/\D/g, "");
-  if (!WHATSAPP_NUMBER.test(number)) return null;
-  return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+  return buildWhatsAppUrl(siteConfig.contact.whatsappNumber, message);
 }
 
 export function getContactEmail() {
