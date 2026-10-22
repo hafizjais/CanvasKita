@@ -112,17 +112,17 @@ export function Services() {
         <div className="mt-16 grid gap-8 border-t border-ink/12 pt-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <h3 className="text-2xl font-semibold">Also available</h3>
-            <p className="mt-2 max-w-sm text-muted">For existing websites. Quoted after a short review of what you have now.</p>
+            <p className="mt-2 max-w-sm text-muted">Ongoing support and technical improvements for your website. Quoted after a short chat about what you need.</p>
             <a
               href="#enquiry"
               className="group mt-5 inline-flex items-center gap-2 font-semibold text-accent"
-              {...track("cta_click", { location: "services", label: "Ask about an existing website" })}
+              {...track("cta_click", { location: "services", label: "Ask about maintenance or SEO" })}
             >
-              <span className="link-underline">Ask about your website</span>
+              <span className="link-underline">Ask about these services</span>
               <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
-          <ul className="grid gap-8 sm:grid-cols-3 lg:col-span-8">
+          <ul className="grid gap-8 sm:grid-cols-2 lg:col-span-8">
             {services.map((service) => (
               <li key={service.title}>
                 <h4 className="font-display text-lg leading-snug font-semibold">{service.title}</h4>

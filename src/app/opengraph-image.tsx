@@ -30,7 +30,7 @@ export default async function Image() {
             Websites that make your business look the part.
           </div>
           <div style={{ display: "flex", fontSize: 28, color: "#5c5850" }}>
-            Business websites · Landing pages · Redesigns · Malaysia
+            Business websites · Landing pages · E-commerce · Malaysia
           </div>
         </div>
         <div style={{ display: "flex", height: 6, width: 120, background: "#9a4a2c" }} />

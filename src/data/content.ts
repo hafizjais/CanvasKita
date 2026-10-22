@@ -10,15 +10,8 @@ export type Service = {
   includes: string[];
 };
 
-/** Services for existing websites, listed under the packages as "Also available". */
+/** Extra services listed under the packages as "Also available". */
 export const services: Service[] = [
-  {
-    title: "Website Redesign",
-    description:
-      "Improve how an existing website looks, reads and works, especially on phones, without losing what already works.",
-    suitedTo: "Businesses with an outdated or hard-to-use site",
-    includes: ["Review of the current site", "Clearer navigation", "Refreshed design", "Mobile improvements"],
-  },
   {
     title: "Maintenance & Updates",
     description:
@@ -85,7 +78,7 @@ export const faqs = [
   {
     question: "What types of websites do you build?",
     answer:
-      "Business and company websites, landing pages for a specific offer or campaign, and redesigns of existing websites. My portfolio covers corporate services, property and financial services, and the same approach works for most service businesses.",
+      "Business and company websites, landing pages for a specific offer or campaign, and online stores and booking websites. My portfolio covers corporate services, property and financial services, and the same approach works for most service businesses.",
   },
   {
     question: "How much does a website cost?",
@@ -101,11 +94,6 @@ export const faqs = [
     question: "Do you provide domain and hosting setup?",
     answer:
       "A custom domain is included with every website. I can also advise on hosting and help set it up, or work with what you already have. We confirm the details in your quotation.",
-  },
-  {
-    question: "Can you redesign an existing website?",
-    answer:
-      "Yes. I start by reviewing what works on your current site and what doesn't, then propose changes to structure, design and mobile experience. Some sites can be improved; others are better rebuilt, and I'll explain which applies to yours.",
   },
   {
     question: "Will the website work on mobile devices?",

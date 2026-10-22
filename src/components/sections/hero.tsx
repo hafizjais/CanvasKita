@@ -43,8 +43,8 @@ export function Hero() {
             </a>
           </div>
           <p className="mt-8 max-w-[30rem] animate-rise border-t border-ink/10 pt-5 text-sm leading-relaxed text-muted [animation-delay:240ms]">
-            For SMEs, consultants, property and financial-services businesses, and anyone whose website no longer
-            does them justice.
+            For SMEs, consultants, property and financial-services businesses, and anyone ready for a professional
+            website.
           </p>
         </div>
 
