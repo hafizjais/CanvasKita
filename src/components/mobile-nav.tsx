@@ -65,11 +65,11 @@ export function MobileNav({ links }: Props) {
             ))}
           </ul>
           <Link
-            href="/#contact"
+            href="/get-quote"
             onClick={() => setOpen(false)}
             className={buttonClasses("primary", "lg", "mt-4 mb-2 w-full sm:hidden")}
           >
-            Discuss Your Project
+            Get an Estimate
           </Link>
         </nav>
       </div>

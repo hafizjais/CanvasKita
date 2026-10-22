@@ -43,7 +43,7 @@ export function EstimateDocument({
   if (estimate.status === "empty") return null;
 
   const validUntil = addDays(issuedAt, pricing.estimate.validityDays);
-  const inclusions = servicePackages[estimate.packageId].features;
+  const inclusions = [...servicePackages[estimate.packageId].features, pricing.customDomain.label];
   const whatsapp = getWhatsAppUrl() ? formatPhone(siteConfig.contact.whatsappNumber.replace(/\D/g, "")) : null;
   const email = getContactEmail();
   const { revisionRounds, postLaunchSupport } = pricing.estimate;

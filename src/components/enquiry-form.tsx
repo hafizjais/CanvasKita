@@ -5,11 +5,12 @@ import { useActionState, useEffect, useRef, useState, useSyncExternalStore, type
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { submitEnquiry } from "@/app/actions/enquiry";
 import { buttonClasses } from "@/components/ui/button";
-import { FormField, inputClasses } from "@/components/ui/form-field";
-import { enquiryOptions } from "@/config/site";
+import { describedBy as sharedDescribedBy, FormField, inputClasses } from "@/components/ui/form-field";
+import { BUDGET_OTHER, enquiryOptions } from "@/config/site";
 import { trackEvent } from "@/lib/analytics";
-import { getContactEmail, getWhatsAppUrl } from "@/lib/contact";
+import { DeliveryFallback } from "@/components/delivery-fallback";
 import {
+  enquiryToText,
   initialEnquiryState,
   limits,
   readEnquiry,
@@ -24,6 +25,58 @@ function Field(props: { id: EnquiryField; label: string; optional?: boolean; err
 
 const subscribeNoop = () => () => {};
 
+/**
+ * Budget range, with an "Other" choice that reveals a box for the visitor's own amount.
+ * Rendered inside the keyed form, so it resets whenever the form does.
+ */
+function BudgetFields({
+  defaultBudget,
+  defaultOther,
+  errors,
+}: {
+  defaultBudget: string;
+  defaultOther: string;
+  errors: EnquiryErrors;
+}) {
+  const [choice, setChoice] = useState(defaultBudget);
+  const showOther = choice === BUDGET_OTHER;
+
+  return (
+    <div className="space-y-5">
+      <Field id="budget" label="Approximate budget" optional error={errors.budget}>
+        <select
+          id="enquiry-budget"
+          name="budget"
+          value={choice}
+          onChange={(event) => setChoice(event.target.value)}
+          aria-invalid={Boolean(errors.budget)}
+          aria-describedby={sharedDescribedBy("enquiry", "budget", errors.budget)}
+          className={inputClasses}
+        >
+          <option value="">Prefer not to say</option>
+          {enquiryOptions.budgets.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
+        </select>
+      </Field>
+      {showOther && (
+        <Field id="budgetOther" label="Your budget" error={errors.budgetOther} hint="For example RM1,500, or a range such as RM800 – RM1,200.">
+          <input
+            id="enquiry-budgetOther"
+            name="budgetOther"
+            required
+            maxLength={limits.budgetOther}
+            defaultValue={defaultOther}
+            aria-invalid={Boolean(errors.budgetOther)}
+            aria-describedby={sharedDescribedBy("enquiry", "budgetOther", errors.budgetOther, true)}
+            className={inputClasses}
+          />
+        </Field>
+      )}
+    </div>
+  );
+}
+
 export function EnquiryForm() {
   const [state, formAction, pending] = useActionState(submitEnquiry, initialEnquiryState);
   const [clientErrors, setClientErrors] = useState<EnquiryErrors | null>(null);
@@ -34,8 +87,6 @@ export function EnquiryForm() {
   const startedAtRef = useRef<HTMLInputElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
 
-  const whatsappUrl = getWhatsAppUrl();
-  const email = getContactEmail();
 
   useEffect(() => {
     if (state.attempt === 0) return;
@@ -196,21 +247,7 @@ export function EnquiryForm() {
           </Field>
         </div>
 
-        <Field id="budget" label="Approximate budget" optional error={errors.budget}>
-          <select
-            id="enquiry-budget"
-            name="budget"
-            defaultValue={values.budget ?? ""}
-            aria-invalid={Boolean(errors.budget)}
-            aria-describedby={describedBy("budget")}
-            className={inputClasses}
-          >
-            <option value="">Prefer not to say</option>
-            {enquiryOptions.budgets.map((option) => (
-              <option key={option}>{option}</option>
-            ))}
-          </select>
-        </Field>
+        <BudgetFields defaultBudget={values.budget ?? ""} defaultOther={values.budgetOther ?? ""} errors={errors} />
 
         <Field id="timeline" label="Desired timeline" optional error={errors.timeline}>
           <select
@@ -230,7 +267,7 @@ export function EnquiryForm() {
       </div>
 
       {/* Spam protection: a field people never see, and the time taken to fill the form. */}
-      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+      <div aria-hidden="true" inert className="absolute -left-[9999px] h-px w-px overflow-hidden print:hidden">
         <label htmlFor="website_url">Leave this field empty</label>
         <input id="website_url" name="website_url" type="text" tabIndex={-1} autoComplete="off" />
       </div>
@@ -240,19 +277,12 @@ export function EnquiryForm() {
         {state.status === "error" && state.message && !clientErrors && (
           <div role="alert" className="mt-6 rounded-lg border border-danger/30 bg-danger/5 p-4 text-sm text-ink">
             <p>{state.message}</p>
-            {!state.errors && (whatsappUrl || email) && (
-              <p className="mt-2 flex flex-wrap gap-x-4 gap-y-1 font-semibold">
-                {whatsappUrl && (
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="underline underline-offset-4">
-                    Message me on WhatsApp<span className="sr-only"> (opens in a new tab)</span>
-                  </a>
-                )}
-                {email && (
-                  <a href={`mailto:${email}`} className="underline underline-offset-4">
-                    Email {email}
-                  </a>
-                )}
-              </p>
+            {!state.errors && (
+              <DeliveryFallback
+                whatsappMessage={`Hi Hafiz, I'd like to discuss a website project.\n\n${enquiryToText(state.values ?? {})}`}
+                emailSubject="Website project enquiry"
+                emailBody={enquiryToText(state.values ?? {})}
+              />
             )}
           </div>
         )}

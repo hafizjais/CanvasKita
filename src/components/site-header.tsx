@@ -7,7 +7,7 @@ import { track } from "@/lib/analytics";
 export const navLinks = [
   { href: "/", label: "Home" },
   { href: "/#services", label: "Services" },
-  { href: "/#work", label: "Portfolio" },
+  { href: "/#work", label: "Projects" },
   { href: "/#about", label: "About" },
   { href: "/#contact", label: "Contact" },
 ];
@@ -34,11 +34,11 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/#contact"
+            href="/get-quote"
             className={buttonClasses("primary", "md", "h-10 max-sm:hidden")}
-            {...track("cta_click", { location: "header", label: "Discuss Your Project" })}
+            {...track("cta_click", { location: "header", label: "Get an Estimate" })}
           >
-            Discuss Your Project
+            Get an Estimate
           </Link>
           <MobileNav links={navLinks} />
         </div>

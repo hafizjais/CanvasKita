@@ -1,13 +1,9 @@
 /**
- * Website package catalogue: the words and visuals on the package cards.
+ * Website package catalogue: the wording in the Services comparison and the estimator.
  * Prices and limits come from src/config/pricing.ts, never from here.
  */
 
-import type { PackageId } from "@/config/pricing";
-
-export type PackageVisual =
-  | { type: "screenshot"; src: string; domain: string; alt: string }
-  | { type: "schematic"; layout: "store" | "booking" | "system" };
+import { packageIds, type PackageId } from "@/config/pricing";
 
 export type ServicePackage = {
   id: PackageId;
@@ -15,7 +11,6 @@ export type ServicePackage = {
   features: string[];
   /** Small print shown under the features. */
   note?: string;
-  visual: PackageVisual;
 };
 
 export const servicePackages: Record<PackageId, ServicePackage> = {
@@ -28,23 +23,11 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
       "WhatsApp call to action and enquiry form",
       "Basic on-page SEO",
     ],
-    visual: {
-      type: "screenshot",
-      src: "/work/financial-hafiz/desktop.webp",
-      domain: "financialhafiz.vercel.app",
-      alt: "Financial Hafiz landing page, an example of a lead-generation landing page",
-    },
   },
   portfolio: {
     id: "portfolio",
     summary: "A personal or studio site that introduces you and presents your best work.",
     features: ["Up to five pages", "About page and project showcase", "Social and contact links", "Responsive design"],
-    visual: {
-      type: "screenshot",
-      src: "/packages/portfolio-hafizmjdigital.webp",
-      domain: "hafizmjdigital.vercel.app",
-      alt: "The Hafiz MJ Digital website, an example of a portfolio website",
-    },
   },
   business: {
     id: "business",
@@ -55,12 +38,6 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
       "WhatsApp integration and contact form",
       "Basic on-page SEO",
     ],
-    visual: {
-      type: "screenshot",
-      src: "/work/magna-ibn/desktop.webp",
-      domain: "magnaibn.com.my",
-      alt: "MAGNA IBN corporate website, an example of a business website",
-    },
   },
   ecommerce: {
     id: "ecommerce",
@@ -72,7 +49,6 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
       "One payment gateway and basic shipping setup",
     ],
     note: "Payment and shipping setup depend on what the chosen platform supports.",
-    visual: { type: "schematic", layout: "store" },
   },
   booking: {
     id: "booking",
@@ -84,7 +60,6 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
       "Basic confirmation workflow",
     ],
     note: "Complex scheduling and additional payment integrations are quoted separately.",
-    visual: { type: "schematic", layout: "booking" },
   },
   custom: {
     id: "custom",
@@ -92,9 +67,8 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
       "Portals, dashboards, internal tools and integrations built around how your business actually works.",
     features: ["Bespoke requirements", "Discovery and technical scope review", "Detailed written quotation"],
     note: "The starting price is a guide only. Every custom project is quoted after a scope review.",
-    visual: { type: "schematic", layout: "system" },
   },
 };
 
-/** Display order on the homepage. */
-export const packageOrder: PackageId[] = ["business", "landing", "portfolio", "ecommerce", "booking", "custom"];
+/** Display order in the Services comparison: cheapest first (see packageIds in pricing.ts). */
+export const packageOrder: PackageId[] = packageIds;

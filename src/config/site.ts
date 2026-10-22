@@ -7,6 +7,9 @@
  * ever rendered as a broken link.
  */
 
+import { packageIds, pricing } from "@/config/pricing";
+import { services } from "@/data/content";
+
 export const siteConfig = {
   name: "Hafiz MJ Digital",
   ownerName: "Hafiz Jais",
@@ -39,11 +42,16 @@ export const siteConfig = {
 } as const;
 
 /**
- * Production URL, e.g. "https://hafizmjdigital.com" (no trailing slash).
- * Set NEXT_PUBLIC_SITE_URL in your hosting environment. Until it is set, the
- * site asks search engines not to index it.
+ * Production URL without a trailing slash. Uses NEXT_PUBLIC_SITE_URL when set
+ * (e.g. "https://hafizmjdigital.com"); otherwise, on Vercel, the project's
+ * production domain, which Vercel provides automatically. Off Vercel and
+ * without the variable, the site asks search engines not to index it.
  */
-export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? "").replace(/\/$/, "");
+const vercelProductionUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : "";
+
+export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || vercelProductionUrl).replace(/\/$/, "");
 
 export const isIndexable =
   Boolean(siteUrl) &&
@@ -51,22 +59,26 @@ export const isIndexable =
 
 export const metadataBase = new URL(siteUrl || "http://localhost:3000");
 
-/** Options shown in the enquiry form. Edit freely. */
+/** The budget choice that lets a visitor type their own amount. */
+export const BUDGET_OTHER = "Other (enter your own amount)";
+
+/** Options shown in the enquiry form. */
 export const enquiryOptions = {
+  // The six website packages (cheapest first), the services for existing
+  // websites, and a catch-all. Names come from pricing.ts and content.ts, so
+  // the dropdown always matches the Services section.
   websiteTypes: [
-    "New business website",
-    "Landing page",
-    "Website redesign",
-    "Maintenance & updates",
-    "SEO & performance improvements",
+    ...packageIds.map((id) => pricing.packages[id].name),
+    ...services.map((service) => service.title),
     "Not sure yet",
   ],
   budgets: [
-    "Under RM2,000",
-    "RM2,000 – RM5,000",
-    "RM5,000 – RM10,000",
-    "Above RM10,000",
+    "Under RM500",
+    "RM500 – RM1,000",
+    "RM1,000 – RM2,500",
+    "Above RM2,500",
     "Not sure yet",
+    BUDGET_OTHER,
   ],
   timelines: [
     "As soon as possible",

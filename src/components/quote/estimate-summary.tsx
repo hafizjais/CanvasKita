@@ -1,3 +1,4 @@
+import { DomainHighlight } from "@/components/domain-highlight";
 import { describeTimeline } from "@/lib/quote/calculate";
 import { formatMYR } from "@/lib/quote/money";
 import { describeTotal } from "@/lib/quote/summary";
@@ -34,6 +35,7 @@ export function EstimateSummary({ estimate, variant = "full" }: { estimate: Esti
           Custom systems are priced after a discovery and technical scope review. Projects usually start from{" "}
           {formatMYR(estimate.startingFrom)}, but that is a guide, not a total.
         </p>
+        <DomainHighlight variant="line" />
       </div>
     );
   }
@@ -80,6 +82,8 @@ export function EstimateSummary({ estimate, variant = "full" }: { estimate: Esti
           </tr>
         </tfoot>
       </table>
+
+      <DomainHighlight variant="line" />
 
       {estimate.oneTimeIsMinimum && (
         <p className="mt-2 text-xs leading-relaxed text-muted">

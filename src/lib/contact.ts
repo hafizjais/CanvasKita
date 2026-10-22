@@ -22,3 +22,10 @@ export function getSocialLinks() {
     .filter((key) => siteConfig.social[key].startsWith("https://"))
     .map((key) => ({ label: labels[key], href: siteConfig.social[key] }));
 }
+
+/** A mailto: link with an encoded subject and body, or null without a configured email. */
+export function getMailtoUrl(subject: string, body: string) {
+  const email = getContactEmail();
+  if (!email) return null;
+  return `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+}

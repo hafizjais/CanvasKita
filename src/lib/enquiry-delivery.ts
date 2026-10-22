@@ -1,6 +1,6 @@
 import "server-only";
 import { siteConfig } from "@/config/site";
-import { isEmail, type EnquiryValues } from "@/lib/enquiry";
+import { budgetText, isEmail, type EnquiryValues } from "@/lib/enquiry";
 
 /**
  * Sends a form submission using whichever method is configured:
@@ -92,7 +92,7 @@ export async function deliverSubmission(submission: Submission): Promise<Deliver
   return { ok: false, reason: "not_configured" };
 }
 
-const enquiryLabels: Record<keyof EnquiryValues, string> = {
+const enquiryLabels: Record<Exclude<keyof EnquiryValues, "budgetOther">, string> = {
   name: "Name",
   business: "Business",
   contact: "Contact",
@@ -104,11 +104,15 @@ const enquiryLabels: Record<keyof EnquiryValues, string> = {
 
 /** The general project enquiry form on the homepage. */
 export function deliverEnquiry(values: EnquiryValues) {
+  // A typed-in budget replaces the "Other" choice, so the recipient sees one clear value.
+  const { budgetOther, ...rest } = values;
+  void budgetOther;
+  const delivered = { ...rest, budget: budgetText(values) };
   return deliverSubmission({
     subject: `New enquiry: ${values.websiteType} — ${values.name}${values.business ? ` (${values.business})` : ""}`,
     heading: "New project enquiry",
-    rows: (Object.keys(enquiryLabels) as (keyof EnquiryValues)[]).map((key) => [enquiryLabels[key], values[key]]),
-    payload: values,
+    rows: (Object.keys(enquiryLabels) as (keyof typeof enquiryLabels)[]).map((key) => [enquiryLabels[key], delivered[key]]),
+    payload: delivered,
     contact: values.contact,
   });
 }

@@ -13,6 +13,8 @@ export type Project = {
   url: string;
   category: string;
   industry: string;
+  /** Client work, or a site for one of your own businesses. Shown on the card. */
+  type: "client" | "own";
   language?: string;
   /** One or two sentences shown on the card. */
   summary: string;
@@ -39,6 +41,7 @@ export const projects: Project[] = [
     industry: "Halal consultancy & corporate services",
     summary:
       "A corporate website for a Malaysian Halal consultancy, presenting its training, consultation and Halal trade services to business clients.",
+    type: "client",
     images: imagesFor("magna-ibn"),
   },
   {
@@ -50,6 +53,7 @@ export const projects: Project[] = [
     industry: "Property agent, Johor Bahru",
     summary:
       "A property website for a Johor Bahru agent that brings subsale, rental, new-project, shop-lot and land listings into one searchable site.",
+    type: "client",
     images: imagesFor("balqismj-property"),
   },
   {
@@ -61,6 +65,7 @@ export const projects: Project[] = [
     industry: "Co-living room rentals, Johor Bahru",
     summary:
       "A room-rental catalogue for co-living houses near UTM Skudai and Kangkar Pulai, so students and professionals can find an available room and enquire quickly.",
+    type: "client",
     images: imagesFor("haven-space-property"),
   },
   {
@@ -73,9 +78,12 @@ export const projects: Project[] = [
     language: "Bahasa Malaysia",
     summary:
       "A Bahasa Malaysia landing page that helps visitors understand debt consolidation and start an informed WhatsApp conversation.",
+    type: "own",
     images: imagesFor("financial-hafiz"),
   },
 ];
+
+export const projectTypeLabel = { client: "Client project", own: "Own project" } as const;
 
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug);

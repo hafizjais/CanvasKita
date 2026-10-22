@@ -23,7 +23,7 @@ import {
   selectionToSearchParams,
   switchPackage,
 } from "@/lib/quote/selection";
-import { addDays, createReference, describeTotal, estimateToWhatsAppMessage, formatDate } from "@/lib/quote/summary";
+import { addDays, createReference, describeTotal, estimateToText, estimateToWhatsAppMessage, formatDate } from "@/lib/quote/summary";
 import type { QuoteSelection } from "@/lib/quote/types";
 
 type StepId = "type" | "scope" | "addons" | "estimate" | "enquiry";
@@ -530,7 +530,7 @@ export function QuoteBuilder() {
         <EstimateSummary estimate={estimate} />
       </div>
       <p className="mt-4 text-sm leading-relaxed text-muted">
-        A preliminary estimate, not a binding quotation. Domains, hosting, third-party subscriptions, payment processing
+        A preliminary estimate, not a binding quotation. Hosting, third-party subscriptions, payment processing
         fees and taxes are not included; the printable version lists every exclusion and assumption.
       </p>
       <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -571,6 +571,8 @@ export function QuoteBuilder() {
         selectionQuery={selectionToSearchParams(selection).toString()}
         reference={doc.reference}
         requiresDescription={estimate.status === "requiresQuotation"}
+        estimateText={estimateToText(estimate, doc.reference)}
+        whatsappMessage={estimateToWhatsAppMessage(estimate, doc.reference)}
       />
       {whatsappUrl && (
         <p className="mt-5 text-sm text-muted">
@@ -724,20 +726,27 @@ export function QuoteBuilder() {
   );
 }
 
-/** Shown while the builder loads, and as a usable price list without JavaScript. */
+/**
+ * Shown in the prerendered page until the estimator starts (a fraction of a
+ * second), and as a usable price list if JavaScript is unavailable.
+ */
 export function QuoteBuilderFallback() {
   return (
     <div className="max-w-3xl">
-      <p className="text-muted">Loading the estimator… If it doesn&rsquo;t appear, here are the starting prices:</p>
-      <ul className="mt-6 divide-y divide-ink/10 border-y border-ink/10">
+      <h2 className="text-xl font-semibold">Starting prices</h2>
+      <ul className="mt-4 divide-y divide-ink/10 border-y border-ink/10">
         {packageIds.map((id) => (
           <li key={id} className="flex justify-between gap-4 py-3">
             <span className="font-semibold">{pricing.packages[id].name}</span>
-            <span className="tabular-nums">From {formatMYR(toSen(pricing.packages[id].basePrice))}</span>
+            <span>From {formatMYR(toSen(pricing.packages[id].basePrice))}</span>
           </li>
         ))}
       </ul>
+      <noscript>
+        <p className="mt-4 text-muted">
+          The interactive estimator needs JavaScript. You can still use the enquiry form on the homepage.
+        </p>
+      </noscript>
     </div>
   );
 }
-

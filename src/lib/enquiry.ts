@@ -1,4 +1,4 @@
-import { enquiryOptions } from "@/config/site";
+import { BUDGET_OTHER, enquiryOptions } from "@/config/site";
 
 /** Shared by the form (instant feedback) and the server action (authoritative). */
 
@@ -9,6 +9,7 @@ export const enquiryFields = [
   "websiteType",
   "message",
   "budget",
+  "budgetOther",
   "timeline",
 ] as const;
 
@@ -31,6 +32,7 @@ export const limits = {
   name: 100,
   business: 120,
   contact: 120,
+  budgetOther: 60,
   message: 2000,
   messageMin: 15,
 };
@@ -67,10 +69,21 @@ export function validateEnquiry(values: EnquiryValues): EnquiryErrors {
   if (values.budget && !(enquiryOptions.budgets as readonly string[]).includes(values.budget))
     errors.budget = "Choose one of the options.";
 
+  if (values.budget === BUDGET_OTHER) {
+    if (!values.budgetOther) errors.budgetOther = "Enter your budget, for example RM1,500 or a range.";
+    else if (values.budgetOther.length > limits.budgetOther) errors.budgetOther = "Please keep this short.";
+  }
+
   if (values.timeline && !(enquiryOptions.timelines as readonly string[]).includes(values.timeline))
     errors.timeline = "Choose one of the options.";
 
   return errors;
+}
+
+/** The budget as it should be shown or delivered: the chosen range, or "Other: <their amount>". */
+export function budgetText(values: Partial<EnquiryValues>) {
+  if (values.budget === BUDGET_OTHER) return values.budgetOther ? `Other: ${values.budgetOther}` : "Other";
+  return values.budget ?? "";
 }
 
 export function isEmail(value: string) {
@@ -79,4 +92,20 @@ export function isEmail(value: string) {
 
 export function isValidContact(value: string) {
   return value.length <= limits.contact && (EMAIL.test(value) || PHONE.test(value));
+}
+
+/** The visitor's enquiry as plain text, for the WhatsApp and email fallbacks. */
+export function enquiryToText(values: Partial<EnquiryValues>) {
+  return [
+    `Name: ${values.name ?? ""}`,
+    values.business ? `Business: ${values.business}` : null,
+    `Contact: ${values.contact ?? ""}`,
+    `Website needed: ${values.websiteType ?? ""}`,
+    values.budget ? `Budget: ${budgetText(values)}` : null,
+    values.timeline ? `Timeline: ${values.timeline}` : null,
+    "",
+    values.message ?? "",
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
 }

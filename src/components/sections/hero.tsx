@@ -1,5 +1,5 @@
-import { ArrowDownRight } from "lucide-react";
-import { ContactCta } from "@/components/contact-cta";
+import Link from "next/link";
+import { ArrowDownRight, ArrowRight } from "lucide-react";
 import { BrowserFrame, PhoneFrame } from "@/components/ui/device-frames";
 import { buttonClasses } from "@/components/ui/button";
 import { getProject } from "@/data/projects";
@@ -25,13 +25,20 @@ export function Hero() {
             presence with thoughtful design, clear messaging and practical technology.
           </p>
           <div className="mt-9 flex animate-rise flex-col gap-3 [animation-delay:180ms] xs:flex-row xs:flex-wrap">
-            <ContactCta location="hero" label="Let's Talk About Your Project" />
+            <Link
+              href="/get-quote"
+              className={buttonClasses("accent", "lg")}
+              {...track("cta_click", { location: "hero", label: "Get an Estimate" })}
+            >
+              Get an Estimate
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
             <a
               href="#work"
               className={buttonClasses("secondary", "lg")}
-              {...track("cta_click", { location: "hero", label: "Explore My Work" })}
+              {...track("cta_click", { location: "hero", label: "View Projects" })}
             >
-              Explore My Work
+              View Projects
               <ArrowDownRight aria-hidden="true" className="size-4" />
             </a>
           </div>

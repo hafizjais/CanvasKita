@@ -1,92 +1,15 @@
 import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
-import { PackageVisual } from "@/components/packages/package-visual";
+import { DomainHighlight } from "@/components/domain-highlight";
 import { buttonClasses } from "@/components/ui/button";
-import { pricing, type PackageId } from "@/config/pricing";
+import { pricing } from "@/config/pricing";
 import { services } from "@/data/content";
-import { servicePackages } from "@/data/packages";
+import { packageOrder, servicePackages } from "@/data/packages";
 import { track } from "@/lib/analytics";
 import { formatMYR, toSen } from "@/lib/quote/money";
 
-function StartingPrice({ id, tone = "light" }: { id: PackageId; tone?: "light" | "dark" }) {
-  return (
-    <p className="flex items-baseline gap-2">
-      <span className={`text-sm ${tone === "dark" ? "text-on-dark-muted" : "text-muted"}`}>From</span>
-      <span className="font-display text-[1.9rem] leading-none font-semibold tracking-tight">
-        {formatMYR(toSen(pricing.packages[id].basePrice))}
-      </span>
-    </p>
-  );
-}
-
-function Features({ id, columns = 1, tone = "light" }: { id: PackageId; columns?: 1 | 2; tone?: "light" | "dark" }) {
-  const { features, note } = servicePackages[id];
-  return (
-    <>
-      <ul className={`mt-5 grid gap-x-6 gap-y-2.5 text-[0.95rem] ${columns === 2 ? "sm:grid-cols-2" : ""}`}>
-        {features.map((feature) => (
-          <li key={feature} className="flex gap-2.5">
-            <Check
-              aria-hidden="true"
-              className={`mt-1 size-4 shrink-0 ${tone === "dark" ? "text-accent-bright" : "text-accent"}`}
-            />
-            <span className={tone === "dark" ? "text-on-dark/90" : "text-graphite"}>{feature}</span>
-          </li>
-        ))}
-      </ul>
-      {note && <p className={`mt-4 text-xs leading-relaxed ${tone === "dark" ? "text-on-dark-muted" : "text-muted"}`}>{note}</p>}
-    </>
-  );
-}
-
-function CustomiseLink({ id, variant = "secondary" }: { id: PackageId; variant?: "primary" | "secondary" | "light" }) {
-  const label = id === "custom" ? "Request a Custom Quotation" : "Customise This Plan";
-  return (
-    <Link
-      href={`/get-quote?package=${id}`}
-      className={buttonClasses(variant, "md")}
-      {...track("cta_click", { location: `package_${id}`, label })}
-    >
-      {label}
-      <span className="sr-only">: {pricing.packages[id].name}</span>
-      <ArrowRight aria-hidden="true" className="size-4" />
-    </Link>
-  );
-}
-
-function PackageCard({ id, featured = false }: { id: PackageId; featured?: boolean }) {
-  const pkg = servicePackages[id];
-  return (
-    <article
-      aria-labelledby={`package-${id}`}
-      className="flex h-full flex-col rounded-2xl border border-ink/12 bg-paper p-5 sm:p-7"
-    >
-      <PackageVisual
-        visual={pkg.visual}
-        sizes={featured ? "(min-width: 1024px) 640px, 92vw" : "(min-width: 1024px) 380px, (min-width: 640px) 46vw, 92vw"}
-      />
-      <div className="mt-6 flex flex-1 flex-col">
-        <div className={featured ? "flex flex-wrap items-end justify-between gap-4" : ""}>
-          <h3 id={`package-${id}`} className="text-[1.6rem] leading-tight font-semibold">
-            {pricing.packages[id].name}
-          </h3>
-          <div className={featured ? "" : "mt-3"}>
-            <StartingPrice id={id} />
-          </div>
-        </div>
-        <p className="mt-3 leading-relaxed text-graphite">{pkg.summary}</p>
-        <Features id={id} columns={featured ? 2 : 1} />
-        <div className="mt-auto pt-7">
-          <CustomiseLink id={id} variant={featured ? "primary" : "secondary"} />
-        </div>
-      </div>
-    </article>
-  );
-}
-
+/** Six website types compared in one compact list. Prices come from src/config/pricing.ts. */
 export function Services() {
-  const custom = servicePackages.custom;
-
   return (
     <section id="services" aria-labelledby="services-title" className="bg-card py-20 sm:py-28">
       <div className="container-page">
@@ -105,57 +28,91 @@ export function Services() {
             <Link
               href="/get-quote"
               className={buttonClasses("primary", "lg")}
-              {...track("cta_click", { location: "services", label: "Build Your Website Plan" })}
+              {...track("cta_click", { location: "services", label: "Get an Estimate" })}
             >
-              Build Your Website Plan
+              Get an Estimate
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </div>
         </div>
 
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-12">
-          <div className="md:col-span-2 lg:col-span-7">
-            <PackageCard id="business" featured />
-          </div>
-          <div className="lg:col-span-5">
-            <PackageCard id="landing" />
-          </div>
-          {(["portfolio", "ecommerce", "booking"] as const).map((id) => (
-            <div key={id} className="lg:col-span-4">
-              <PackageCard id={id} />
-            </div>
-          ))}
+        <DomainHighlight variant="banner" />
 
-          <article
-            aria-labelledby="package-custom"
-            className="on-dark grid gap-8 rounded-2xl bg-charcoal p-6 text-on-dark sm:p-9 md:col-span-2 lg:col-span-12 lg:grid-cols-12 lg:items-center"
+        <div className="mt-10 border-t border-ink">
+          <div
+            aria-hidden="true"
+            className="hidden grid-cols-[minmax(0,1.1fr)_minmax(0,1.45fr)_11rem_14rem] gap-8 border-b border-ink/15 py-3 text-xs font-semibold tracking-[0.1em] text-muted uppercase lg:grid"
           >
-            <div className="lg:col-span-6">
-              <p className="text-sm font-semibold tracking-[0.12em] text-on-dark-muted uppercase">Bespoke</p>
-              <h3 id="package-custom" className="mt-3 text-[1.9rem] leading-tight font-semibold sm:text-[2.2rem]">
-                {pricing.packages.custom.name}
-              </h3>
-              <p className="mt-3 max-w-lg leading-relaxed text-on-dark-muted">{custom.summary}</p>
-              <div className="mt-6">
-                <StartingPrice id="custom" tone="dark" />
-              </div>
-              <Features id="custom" tone="dark" />
-              <div className="mt-7">
-                <CustomiseLink id="custom" variant="light" />
-              </div>
-            </div>
-            <div className="lg:col-span-5 lg:col-start-8">
-              <PackageVisual visual={custom.visual} sizes="(min-width: 1024px) 460px, 92vw" tone="dark" />
-            </div>
-          </article>
+            <span>Website type</span>
+            <span>Includes</span>
+            <span>Starting price</span>
+            <span />
+          </div>
+
+          <ul>
+            {packageOrder.map((id) => {
+              const pkg = servicePackages[id];
+              const { name, basePrice, requiresQuotation } = pricing.packages[id];
+              const cta = requiresQuotation ? "Request a Quotation" : "Customise This Plan";
+              return (
+                <li
+                  key={id}
+                  aria-labelledby={`package-${id}`}
+                  className="grid gap-5 border-b border-ink/12 py-7 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.45fr)_11rem_14rem] lg:items-start lg:gap-8"
+                >
+                  <div className="sm:col-span-2 lg:col-span-1">
+                    <h3 id={`package-${id}`} className="text-[1.4rem] leading-tight font-semibold">
+                      {name}
+                    </h3>
+                    <p className="mt-2 max-w-md text-[0.95rem] leading-relaxed text-muted">{pkg.summary}</p>
+                  </div>
+
+                  <div className="sm:col-span-2 lg:col-span-1">
+                    <ul className="grid gap-x-6 gap-y-1.5 text-[0.93rem] sm:grid-cols-2" aria-label={`${name} includes`}>
+                      {pkg.features.map((feature) => (
+                        <li key={feature} className="flex gap-2">
+                          <Check aria-hidden="true" className="mt-[0.3rem] size-3.5 shrink-0 text-accent" />
+                          <span className="text-graphite">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    {pkg.note && <p className="mt-2.5 text-xs leading-relaxed text-muted">{pkg.note}</p>}
+                  </div>
+
+                  <div>
+                    <p className="flex items-baseline gap-2 lg:block">
+                      <span className="text-sm text-muted lg:block">{requiresQuotation ? "Guide from" : "From"}</span>
+                      <span className="font-display text-[1.6rem] leading-none font-semibold tracking-tight">
+                        {formatMYR(toSen(basePrice))}
+                      </span>
+                    </p>
+                    <DomainHighlight variant="badge" />
+                  </div>
+
+                  <div className="sm:justify-self-end lg:justify-self-stretch">
+                    <Link
+                      href={`/get-quote?package=${id}`}
+                      className={buttonClasses("secondary", "md", "w-full whitespace-nowrap sm:w-auto lg:w-full")}
+                      {...track("cta_click", { location: `package_${id}`, label: cta })}
+                    >
+                      {cta}
+                      <span className="sr-only">: {name}</span>
+                      <ArrowRight aria-hidden="true" className="size-4" />
+                    </Link>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <p className="mt-4 text-sm text-muted">
+            Prices in MYR. Hosting, third-party subscriptions and payment processing fees are not included.
+          </p>
         </div>
 
         <div className="mt-16 grid gap-8 border-t border-ink/12 pt-10 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <h3 className="text-2xl font-semibold">Also available</h3>
-            <p className="mt-2 max-w-sm text-muted">
-              For existing websites. Quoted after a short review of what you have now.
-            </p>
+            <p className="mt-2 max-w-sm text-muted">For existing websites. Quoted after a short review of what you have now.</p>
             <a
               href="#enquiry"
               className="group mt-5 inline-flex items-center gap-2 font-semibold text-accent"

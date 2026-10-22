@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useActionState, useEffect, useRef, useState, useSyncExternalStore, type FormEvent } from "react";
 import { CheckCircle2, Loader2, Send } from "lucide-react";
 import { submitQuoteEnquiry } from "@/app/actions/quote-enquiry";
+import { DeliveryFallback } from "@/components/delivery-fallback";
 import { buttonClasses } from "@/components/ui/button";
 import { describedBy, FormField, inputClasses } from "@/components/ui/form-field";
 import { trackEvent } from "@/lib/analytics";
@@ -23,9 +24,12 @@ type Props = {
   selectionQuery: string;
   reference: string;
   requiresDescription: boolean;
+  /** The estimate as text and as a WhatsApp message, for the fallback when delivery fails. */
+  estimateText: string;
+  whatsappMessage: string;
 };
 
-export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescription }: Props) {
+export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescription, estimateText, whatsappMessage }: Props) {
   const [state, formAction, pending] = useActionState(submitQuoteEnquiry, initialQuoteEnquiryState);
   const [clientErrors, setClientErrors] = useState<QuoteEnquiryErrors | null>(null);
   const enhanced = useSyncExternalStore(subscribeNoop, () => true, () => false);
@@ -162,7 +166,7 @@ export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescriptio
         </div>
       </div>
 
-      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+      <div aria-hidden="true" inert className="absolute -left-[9999px] h-px w-px overflow-hidden print:hidden">
         <label htmlFor="quote-website_url">Leave this field empty</label>
         <input id="quote-website_url" name="website_url" type="text" tabIndex={-1} autoComplete="off" />
       </div>
@@ -176,9 +180,25 @@ export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescriptio
         ) : (
           state.status === "error" &&
           state.message && (
-            <p role="alert" className="mt-6 rounded-lg border border-danger/30 bg-danger/5 p-4 text-sm">
-              {state.message}
-            </p>
+            <div role="alert" className="mt-6 rounded-lg border border-danger/30 bg-danger/5 p-4 text-sm">
+              <p>{state.message}</p>
+              {!state.errors && (
+                <DeliveryFallback
+                  whatsappMessage={whatsappMessage}
+                  emailSubject={`Website estimate ${reference}`}
+                  emailBody={[
+                    `Name: ${state.values?.name ?? ""}`,
+                    state.values?.business ? `Business: ${state.values.business}` : null,
+                    `Contact: ${state.values?.contact ?? ""}`,
+                    state.values?.notes ? `\n${state.values.notes}` : null,
+                    "",
+                    estimateText,
+                  ]
+                    .filter((line) => line !== null)
+                    .join("\n")}
+                />
+              )}
+            </div>
           )
         )}
       </div>

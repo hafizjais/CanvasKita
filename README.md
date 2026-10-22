@@ -28,7 +28,7 @@ Everything a visitor uses to contact you lives in **`src/config/site.ts`**. Empt
 | WhatsApp greeting | `siteConfig.contact.whatsappMessage` | The pre-filled message. Keep it short. |
 | Contact email | `siteConfig.contact.email` | Shown in the contact section, footer and privacy notice. |
 | Social profiles | `siteConfig.social` | Full `https://` URLs. Empty entries are hidden. |
-| Production URL | `NEXT_PUBLIC_SITE_URL` env var | Enables canonical URLs, sitemap and indexing (see [SEO](#seo-and-indexing)). |
+| Production URL | `NEXT_PUBLIC_SITE_URL` env var | Optional on Vercel, which provides the production domain automatically. Set it when you add a custom domain (see [SEO](#seo-and-indexing)). |
 | Form delivery | env vars | See [Enquiry form delivery](#enquiry-form-delivery). **Until this is set, the form tells visitors their message was not sent.** |
 | Project relationship | `relationship` in `src/data/projects.ts` | `"client"`, `"own"` or `"unconfirmed"`. Financial Hafiz is `"own"`; the others are `"unconfirmed"` and show no label. |
 
@@ -36,7 +36,7 @@ Content that is likely to change (services, benefits, process steps, FAQs, crede
 
 ## Packages and the price estimator
 
-The homepage Services section shows six website packages. The estimator at **`/get-quote`** lets visitors configure a package and see an itemised estimate in MYR, print it or save it as a PDF, send it on WhatsApp, or submit it as an enquiry. No contact details are needed to see a price.
+The homepage Services section compares six website packages, each with a "Customise This Plan" link that opens the estimator with that type selected. The estimator at **`/get-quote`** lets visitors configure a package and see an itemised estimate in MYR, print it or save it as a PDF, send it on WhatsApp, or submit it as an enquiry. No contact details are needed to see a price.
 
 **To change prices, edit `src/config/pricing.ts`.** It is the only place figures live:
 
@@ -44,6 +44,7 @@ The homepage Services section shows six website packages. The estimator at **`/g
 | --- | --- |
 | Package starting prices, included pages/products, page limits, indicative timelines | `pricing.packages` |
 | Add-on prices (`fixed`, `percent` of base, or `monthly`), which packages offer them, page limits | `pricing.addOns` |
+| Custom domain highlight (included with every package) | `pricing.customDomain` |
 | Extra page price | `pricing.extraPagePrice` |
 | Extra product listings (block size, price, maximum) | `pricing.extraProducts` |
 | Expedited delivery percentage and availability | `pricing.expedited` |
@@ -51,7 +52,7 @@ The homepage Services section shows six website packages. The estimator at **`/g
 | Estimate validity, reference prefix, revisions, post-launch support | `pricing.estimate` |
 | Exclusions and assumptions printed on the estimate | `pricing.exclusions`, `pricing.assumptions` |
 
-Card wording, feature lists and images are in `src/data/packages.ts`. After changing prices, run `npm test`. A few tests check today's figures (for example RM1,900 for a business website), so update them when you change those prices.
+Package descriptions, inclusions and display order are in `src/data/packages.ts`. After changing prices, run `npm test`. A few tests check today's figures (for example RM380 for a business website), so update them when you change those prices.
 
 How estimates are calculated (`src/lib/quote/calculate.ts`):
 - Amounts are integer sen, so totals are exact.
@@ -96,9 +97,11 @@ public/
 
 The "Selected work" section shows one card per project, and each card links to the live website.
 
+Projects have a `type` of `"client"` or `"own"`, shown as a label on each card. MAGNA IBN is the featured project (`FEATURED` in `src/components/sections/selected-work.tsx`).
+
 1. Add screenshots to `public/work/<slug>/`: `desktop.webp` (1440×900 capture of the homepage) and `mobile.webp` (780×1688, i.e. 390×844 at 2× pixel density).
 2. Add an entry to `projects` in `src/data/projects.ts`. Describe only what is visible on the live site; don't add results, figures or quotes you can't support.
-3. The card and the footer link appear automatically. With an odd number of projects, the last card sits alone on its row.
+3. The card and the footer link appear automatically.
 
 Screenshots were captured from the live sites on 19 October 2026. Re-capture them when a site changes significantly.
 
@@ -160,8 +163,8 @@ Links are tracked through `data-track` attributes (see `track()` in `src/lib/ana
 
 ## SEO and indexing
 
-- Set `NEXT_PUBLIC_SITE_URL` (e.g. `https://hafizmjdigital.com`) in production only.
-- Without it, or on a Vercel preview deployment (`VERCEL_ENV` is not `production`), pages send `noindex` and `robots.txt` disallows crawling, so test deployments stay out of search results.
+- The production URL comes from `NEXT_PUBLIC_SITE_URL` (e.g. `https://hafizmjdigital.com`) when set. Otherwise, on Vercel, it comes from the project's production domain, which Vercel provides automatically (`VERCEL_PROJECT_PRODUCTION_URL`).
+- Vercel preview deployments, and builds outside Vercel without `NEXT_PUBLIC_SITE_URL`, send `noindex` and `robots.txt` disallows crawling, so test deployments stay out of search results.
 - With it: canonical URLs, Open Graph/Twitter metadata, `sitemap.xml`, and `ProfessionalService` and `FAQPage` structured data are generated. Structured data contains no ratings or reviews, and the email and phone are included only when configured.
 
 ## Deploying

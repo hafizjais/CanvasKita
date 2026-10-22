@@ -63,11 +63,23 @@ const pricedPackages: PackageId[] = ["landing", "portfolio", "business", "ecomme
 export const pricing = {
   currency: "MYR",
 
+  /**
+   * Included with every package, and highlighted on the Services section, in
+   * the estimator and on the printed estimate. Edit the wording freely.
+   * `terms` is shown on the printed estimate; add the registration period and
+   * renewal terms here once you've decided them.
+   */
+  customDomain: {
+    label: "Custom domain included",
+    description: "Every website comes with its own custom domain, such as yourbusiness.com.",
+    terms: null as string | null,
+  },
+
   /** Each standard content page beyond a package's included pages. */
-  extraPagePrice: 150,
+  extraPagePrice: 30,
 
   /** E-commerce: product listings beyond those included, sold in blocks. */
-  extraProducts: { blockSize: 10, price: 120, max: 200 },
+  extraProducts: { blockSize: 10, price: 24, max: 200 },
 
   /** Optional faster delivery: a percentage of the one-time project subtotal. */
   expedited: {
@@ -78,7 +90,7 @@ export const pricing = {
   packages: {
     landing: {
       name: "Landing Page",
-      basePrice: 850,
+      basePrice: 170,
       includedPages: 1,
       maxPages: 1,
       includedProducts: 0,
@@ -88,7 +100,7 @@ export const pricing = {
     },
     portfolio: {
       name: "Portfolio Website",
-      basePrice: 1200,
+      basePrice: 240,
       includedPages: 5,
       maxPages: 30,
       includedProducts: 0,
@@ -98,7 +110,7 @@ export const pricing = {
     },
     business: {
       name: "Business Website",
-      basePrice: 1900,
+      basePrice: 380,
       includedPages: 5,
       maxPages: 30,
       includedProducts: 0,
@@ -108,7 +120,7 @@ export const pricing = {
     },
     ecommerce: {
       name: "E-commerce Website",
-      basePrice: 3000,
+      basePrice: 600,
       // Store pages (shop, product, cart, checkout) come with the platform;
       // this counts the standard content pages such as Home, About and Contact.
       includedPages: 5,
@@ -120,7 +132,7 @@ export const pricing = {
     },
     booking: {
       name: "Booking & Reservation Website",
-      basePrice: 2200,
+      basePrice: 440,
       includedPages: 5,
       maxPages: 30,
       includedProducts: 0,
@@ -130,7 +142,7 @@ export const pricing = {
     },
     custom: {
       name: "Custom Website / Web System",
-      basePrice: 4000,
+      basePrice: 800,
       includedPages: 0,
       maxPages: 0,
       includedProducts: 0,
@@ -145,7 +157,7 @@ export const pricing = {
       label: "Copywriting",
       description: "Website copy written for up to five pages.",
       kind: "fixed",
-      amount: 450,
+      amount: 90,
       coversPages: 5,
       availableFor: pricedPackages,
     },
@@ -160,14 +172,14 @@ export const pricing = {
       label: "Blog / CMS setup",
       description: "A blog or editable content area you can update yourself.",
       kind: "fixed",
-      amount: 350,
+      amount: 70,
       availableFor: pricedPackages,
     },
     enhancedSeo: {
       label: "Enhanced on-page SEO",
       description: "Keyword-informed titles, descriptions, headings and structure for up to five pages.",
       kind: "fixed",
-      amount: 400,
+      amount: 80,
       coversPages: 5,
       availableFor: pricedPackages,
     },
@@ -175,21 +187,21 @@ export const pricing = {
       label: "Google Analytics setup",
       description: "GA4 property, site tag and key events.",
       kind: "fixed",
-      amount: 150,
+      amount: 30,
       availableFor: pricedPackages,
     },
     metaPixel: {
       label: "Meta Pixel setup",
       description: "Pixel installed with standard events for Facebook and Instagram ads.",
       kind: "fixed",
-      amount: 180,
+      amount: 36,
       availableFor: pricedPackages,
     },
     newsletterCrm: {
       label: "Newsletter or CRM integration",
       description: "Connect forms to a mailing list or CRM. Final price depends on the platform.",
       kind: "fixed",
-      amount: 300,
+      amount: 60,
       isStartingPrice: true,
       availableFor: pricedPackages,
     },
@@ -197,14 +209,14 @@ export const pricing = {
       label: "Payment gateway setup",
       description: "One supported payment gateway, where the site's platform allows it.",
       kind: "fixed",
-      amount: 400,
+      amount: 80,
       availableFor: ["landing", "business", "booking"],
     },
     maintenance: {
       label: "Monthly maintenance plan",
       description: "Ongoing updates and checks within an agreed monthly scope.",
       kind: "monthly",
-      amount: 150,
+      amount: 30,
       availableFor: pricedPackages,
     },
   } satisfies Record<AddOnId, AddOnPricing>,
@@ -221,7 +233,6 @@ export const pricing = {
   },
 
   exclusions: [
-    "Domain name registration and renewal",
     "Web hosting fees",
     "Third-party software, platform, plugin or theme subscriptions (for example e-commerce platform plans)",
     "Payment gateway transaction and processing fees",
@@ -233,11 +244,16 @@ export const pricing = {
 
   assumptions: [
     "Prices are in Malaysian ringgit (MYR).",
+    "A custom domain is included with every package. Its registration period and renewal terms are confirmed in the formal quotation.",
     "You provide content, images and feedback within the agreed schedule.",
     "Timelines are indicative and start once content has been received.",
     "Scope follows the package inclusions and selected options listed in this estimate.",
   ],
 };
 
-export const packageIds = Object.keys(pricing.packages) as PackageId[];
+/** Packages from cheapest to most expensive, with quotation-only packages last. */
+export const packageIds = (Object.keys(pricing.packages) as PackageId[]).sort((a, b) => {
+  const [x, y] = [pricing.packages[a], pricing.packages[b]];
+  return Number(x.requiresQuotation) - Number(y.requiresQuotation) || x.basePrice - y.basePrice;
+});
 export const addOnIds = Object.keys(pricing.addOns) as AddOnId[];

@@ -100,7 +100,7 @@ export const faqs = [
   {
     question: "Do you provide domain and hosting setup?",
     answer:
-      "I can advise on a suitable domain and hosting and help set them up, or work with what you already have. We confirm the arrangement in your quotation.",
+      "A custom domain is included with every website. I can also advise on hosting and help set it up, or work with what you already have. We confirm the details in your quotation.",
   },
   {
     question: "Can you redesign an existing website?",
