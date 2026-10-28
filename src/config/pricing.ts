@@ -43,10 +43,9 @@ export type AddOnPricing = {
   description: string;
   /**
    * fixed:   a one-time amount in RM
-   * percent: a one-time percentage of the base package price
    * monthly: a recurring monthly amount in RM, never added to the project total
    */
-  kind: "fixed" | "percent" | "monthly";
+  kind: "fixed" | "monthly";
   amount: number;
   /** "from" pricing: the final amount is confirmed after review. */
   isStartingPrice?: boolean;
@@ -78,12 +77,6 @@ export const pricing = {
 
   /** E-commerce: product listings beyond those included, sold in blocks. */
   extraProducts: { blockSize: 10, price: 24, max: 200 },
-
-  /** Optional faster delivery: a percentage of the one-time project subtotal. */
-  expedited: {
-    percent: 25,
-    availableFor: ["landing", "portfolio", "business"] as PackageId[],
-  },
 
   packages: {
     landing: {
@@ -147,8 +140,8 @@ export const pricing = {
     secondLanguage: {
       label: "Second language support",
       description: "A second language version of the site. Translation is not included unless agreed.",
-      kind: "percent",
-      amount: 30,
+      kind: "fixed",
+      amount: 45,
       availableFor: pricedPackages,
     },
     blogCms: {

@@ -10,7 +10,6 @@ export type QuoteSelection = {
   /** Total initial product listings wanted (e-commerce). */
   products: number;
   addOns: AddOnId[];
-  expedited: boolean;
   /** Booking: multiple staff, rooms or locations, or custom booking rules. */
   complexScheduling: boolean;
   /** E-commerce: extra payment gateways or advanced shipping rules. */

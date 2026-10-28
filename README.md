@@ -43,11 +43,10 @@ The homepage Services section compares five website packages, each with a "Custo
 | What | Setting |
 | --- | --- |
 | Package starting prices, included pages/products, page limits, indicative timelines | `pricing.packages` |
-| Add-on prices (`fixed`, `percent` of base, or `monthly`), which packages offer them, page limits | `pricing.addOns` |
+| Add-on prices (`fixed` or `monthly`), which packages offer them, page limits | `pricing.addOns` |
 | Custom domain highlight (included with every package) | `pricing.customDomain` |
 | Extra page price | `pricing.extraPagePrice` |
 | Extra product listings (block size, price, maximum) | `pricing.extraProducts` |
-| Expedited delivery percentage and availability | `pricing.expedited` |
 | Features already included in a package (never charged twice) | `includedAddOns` on each package |
 | Estimate validity, reference prefix, revisions, post-launch support | `pricing.estimate` |
 | Exclusions and assumptions printed on the estimate | `pricing.exclusions`, `pricing.assumptions` |

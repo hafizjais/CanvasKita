@@ -13,11 +13,10 @@ import { servicePackages } from "@/data/packages";
 import { trackEvent } from "@/lib/analytics";
 import { getWhatsAppUrl } from "@/lib/contact";
 import { calculateEstimate } from "@/lib/quote/calculate";
-import { formatMYR, percentOf, toSen } from "@/lib/quote/money";
+import { formatMYR, toSen } from "@/lib/quote/money";
 import {
   emptySelection,
   isAddOnAvailable,
-  isExpeditedAvailable,
   selectionForPackage,
   selectionFromSearchParams,
   selectionToSearchParams,
@@ -54,12 +53,9 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function addOnPrice(id: AddOnId, packageId: PackageId) {
+function addOnPrice(id: AddOnId) {
   const addOn = pricing.addOns[id];
   if (addOn.kind === "monthly") return `${formatMYR(toSen(addOn.amount))}/month`;
-  if (addOn.kind === "percent") {
-    return `${addOn.amount}% of base · ${formatMYR(percentOf(toSen(pricing.packages[packageId].basePrice), addOn.amount))}`;
-  }
   return `${"isStartingPrice" in addOn && addOn.isStartingPrice ? "From " : ""}${formatMYR(toSen(addOn.amount))}`;
 }
 
@@ -415,19 +411,9 @@ export function QuoteBuilder() {
                   onChange={() => toggleAddOn("paymentGateway")}
                   title="Take payments or deposits when customers book"
                   description="Sets up one payment gateway. The same option appears under add-ons."
-                  price={addOnPrice("paymentGateway", "booking")}
+                  price={addOnPrice("paymentGateway")}
                 />
               </>
-            )}
-
-            {isExpeditedAvailable(selection.packageId) && (
-              <OptionRow
-                checked={selection.expedited}
-                onChange={() => update({ ...selection, expedited: !selection.expedited })}
-                title="Expedited delivery"
-                description="A shorter schedule, subject to availability when you confirm."
-                price={`+${pricing.expedited.percent}% of project subtotal`}
-              />
             )}
           </div>
       </>
@@ -464,7 +450,7 @@ export function QuoteBuilder() {
                       onChange={() => toggleAddOn(id)}
                       title={addOn.label}
                       description={addOn.description}
-                      price={included ? "Included" : addOnPrice(id, selection.packageId!)}
+                      price={included ? "Included" : addOnPrice(id)}
                       note={
                         overLimit
                           ? `Covers ${covers} of your ${selection.pages} pages; the other ${selection.pages - covers} are quoted separately.`

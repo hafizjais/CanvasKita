@@ -6,7 +6,6 @@ export const emptySelection: QuoteSelection = {
   pages: 0,
   products: 0,
   addOns: [],
-  expedited: false,
   complexScheduling: false,
   advancedCommerce: false,
 };
@@ -21,10 +20,6 @@ export function isAddOnAvailable(addOn: AddOnId, packageId: PackageId | null) {
     (pricing.addOns[addOn].availableFor as PackageId[]).includes(packageId) &&
     !(pricing.packages[packageId].includedAddOns as AddOnId[]).includes(addOn)
   );
-}
-
-export function isExpeditedAvailable(packageId: PackageId | null) {
-  return Boolean(packageId && pricing.expedited.availableFor.includes(packageId));
 }
 
 /** Sensible defaults for a package: its included pages and products, nothing extra. */
@@ -46,7 +41,6 @@ export function switchPackage(current: QuoteSelection, packageId: PackageId): Qu
     ...next,
     pages: Math.max(next.pages, Math.min(current.pages, pricing.packages[packageId].maxPages)),
     addOns: current.addOns,
-    expedited: current.expedited,
   });
 }
 
@@ -77,7 +71,6 @@ export function normalizeSelection(input: Partial<QuoteSelection>): QuoteSelecti
       ? clampInt(input.products, pkg.includedProducts, pricing.extraProducts.max, pkg.includedProducts)
       : 0,
     addOns: addOnIds.filter((id) => addOns.includes(id) && isAddOnAvailable(id, packageId)),
-    expedited: Boolean(input.expedited) && isExpeditedAvailable(packageId),
     complexScheduling: packageId === "booking" && Boolean(input.complexScheduling),
     advancedCommerce: packageId === "ecommerce" && Boolean(input.advancedCommerce),
   };
@@ -92,7 +85,6 @@ export function selectionToSearchParams(selection: QuoteSelection) {
   if (selection.pages !== pkg.includedPages) params.set("pages", String(selection.pages));
   if (selection.products !== pkg.includedProducts) params.set("products", String(selection.products));
   if (selection.addOns.length) params.set("addons", selection.addOns.join(","));
-  if (selection.expedited) params.set("expedited", "1");
   if (selection.complexScheduling) params.set("scheduling", "complex");
   if (selection.advancedCommerce) params.set("commerce", "advanced");
   return params;
@@ -107,7 +99,6 @@ export function selectionFromSearchParams(params: { get(name: string): string | 
     pages: params.get("pages") ? Number(params.get("pages")) : defaults.pages,
     products: params.get("products") ? Number(params.get("products")) : defaults.products,
     addOns: (params.get("addons") ?? "").split(",").filter(Boolean) as AddOnId[],
-    expedited: params.get("expedited") === "1",
     complexScheduling: params.get("scheduling") === "complex",
     advancedCommerce: params.get("commerce") === "advanced",
   });

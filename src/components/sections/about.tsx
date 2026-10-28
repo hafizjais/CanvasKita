@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { credentials } from "@/data/content";
 import { track } from "@/lib/analytics";
-import photo from "../../../public/about/hafiz.jpg";
+import photo from "../../../public/about/hafiz-about.jpg";
 
 const principles = [
   { title: "Business first", body: "Who your customers are and what they need to know comes before colours and layouts." },
@@ -18,10 +18,10 @@ export function About() {
           <div className="relative mx-auto max-w-[26rem] lg:mx-0">
             <Image
               src={photo}
-              alt="Portrait of Hafiz, founder of Hafiz MJ Digital, wearing a batik shirt"
+              alt="Hafiz, founder of Hafiz MJ Digital, walking across Tower Bridge in London"
               sizes="(min-width: 1024px) 416px, 90vw"
               placeholder="blur"
-              className="aspect-[4/5] w-full rounded-2xl object-cover object-top"
+              className="aspect-[4/5] w-full rounded-2xl object-cover object-[50%_70%]"
             />
             <p className="absolute -bottom-4 left-5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper">
               Hafiz · Founder

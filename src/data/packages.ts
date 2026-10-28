@@ -21,7 +21,6 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
       "One responsive landing page",
       "Up to seven content sections",
       "WhatsApp call to action and enquiry form",
-      "Basic on-page SEO",
     ],
   },
   portfolio: {
@@ -36,7 +35,6 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
       "Up to five pages",
       "Services, About and Contact pages",
       "WhatsApp integration and contact form",
-      "Basic on-page SEO",
     ],
   },
   ecommerce: {

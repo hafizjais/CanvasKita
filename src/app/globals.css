@@ -103,6 +103,77 @@
   .link-underline:focus-visible {
     background-size: 100% 1px;
   }
+
+  /* Process journey: phase platforms with restrained 3D depth. */
+  .journey-item {
+    perspective: 1100px;
+  }
+
+  .journey-card {
+    --rx: 0deg;
+    --ry: 0deg;
+    --lift: 0px;
+    --depth: 1;
+    --ledge: #ddd5c6;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 12%, transparent);
+    background: var(--color-card);
+    transform-style: preserve-3d;
+    transform: translateY(var(--lift)) rotateX(var(--rx)) rotateY(var(--ry));
+    box-shadow:
+      0 6px 0 0 var(--ledge),
+      0 30px 44px -30px rgb(22 21 19 / 0.4);
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 0.45s ease,
+      border-color 0.3s ease;
+  }
+
+  .journey-card .journey-3d {
+    transform-style: preserve-3d;
+  }
+
+  .journey-layer {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform: translateZ(calc(var(--z) * var(--depth)));
+    transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .journey-card[aria-selected="true"] {
+    --depth: 1.9;
+    --ledge: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  @media (hover: hover) {
+    .journey-card:hover {
+      --lift: -6px;
+      --depth: 1.9;
+      box-shadow:
+        0 6px 0 0 var(--ledge),
+        0 46px 60px -34px rgb(22 21 19 / 0.5);
+    }
+  }
+
+  .journey-card:focus-visible {
+    border-radius: 1.5rem;
+    outline-offset: 5px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .journey-card {
+      --rx: 0deg !important;
+      --ry: 0deg !important;
+    }
+  }
 }
 
 @media print {

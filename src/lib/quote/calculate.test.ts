@@ -19,7 +19,6 @@ const base = (id: keyof typeof P) => toSen(P[id].basePrice);
 const addOn = (id: keyof typeof A) => toSen(A[id].amount);
 const extraPage = toSen(pricing.extraPagePrice);
 const productBlock = toSen(pricing.extraProducts.price);
-const percent = (sen: number, n: number) => Math.round((sen * n) / 100);
 
 function priced(selection: Partial<QuoteSelection>): PricedEstimate {
   const estimate = calculateEstimate(selection);
@@ -103,16 +102,14 @@ describe("add-ons", () => {
     assertTotalsMatchLines(estimate);
   });
 
-  test("second language is a percentage of the base package only, not of extras", () => {
+  test("second language is a flat price whatever the package size", () => {
     const pages = P.business.includedPages + 2;
     const estimate = priced({ packageId: "business", pages, addOns: ["secondLanguage", "copywriting"] });
-    const language = estimate.oneTime.find((line) => line.id === "secondLanguage");
-    const expected = percent(base("business"), A.secondLanguage.amount);
-    assert.equal(language?.amount, expected);
-    assert.equal(estimate.oneTimeTotal, base("business") + 2 * extraPage + expected + addOn("copywriting"));
+    assert.equal(estimate.oneTime.find((line) => line.id === "secondLanguage")?.amount, addOn("secondLanguage"));
+    assert.equal(estimate.oneTimeTotal, base("business") + 2 * extraPage + addOn("secondLanguage") + addOn("copywriting"));
     assert.equal(
       priced({ packageId: "landing", addOns: ["secondLanguage"] }).oneTimeTotal,
-      base("landing") + percent(base("landing"), A.secondLanguage.amount),
+      base("landing") + addOn("secondLanguage"),
     );
   });
 
@@ -171,29 +168,7 @@ describe("recurring maintenance", () => {
   });
 });
 
-describe("expedited delivery and complexity", () => {
-  test("expedited adds a percentage of the one-time subtotal and excludes maintenance", () => {
-    assert.ok(pricing.expedited.availableFor.includes("business"));
-    const estimate = priced({
-      packageId: "business",
-      pages: P.business.includedPages + 1,
-      addOns: ["googleAnalytics", "maintenance"],
-      expedited: true,
-    });
-    const subtotal = base("business") + extraPage + addOn("googleAnalytics");
-    const surcharge = percent(subtotal, pricing.expedited.percent);
-    assert.equal(estimate.oneTime.find((line) => line.id === "expedited")?.amount, surcharge);
-    assert.equal(estimate.oneTimeTotal, subtotal + surcharge);
-    assert.equal(estimate.monthlyTotal, addOn("maintenance"));
-    assertTotalsMatchLines(estimate);
-  });
-
-  test("expedited is ignored where it isn't offered", () => {
-    const unavailable = packageIds.find((id) => !pricing.expedited.availableFor.includes(id));
-    assert.ok(unavailable, "expected at least one package without expedited delivery");
-    assert.equal(priced({ packageId: unavailable, expedited: true }).oneTimeTotal, base(unavailable));
-  });
-
+describe("booking complexity", () => {
   test("complex booking requirements are quoted separately, not priced", () => {
     const estimate = priced({ packageId: "booking", complexScheduling: true });
     assert.equal(estimate.oneTimeTotal, base("booking"));
@@ -205,10 +180,9 @@ describe("expedited delivery and complexity", () => {
 
 describe("switching and URL round trips", () => {
   test("switching package keeps compatible choices and drops the rest", () => {
-    const business = normalizeSelection({ packageId: "business", pages: 9, addOns: ["paymentGateway", "copywriting"], expedited: true });
+    const business = normalizeSelection({ packageId: "business", pages: 9, addOns: ["paymentGateway", "copywriting"] });
     const store = switchPackage(business, "ecommerce");
     assert.deepEqual(store.addOns, ["copywriting"]);
-    assert.equal(store.expedited, false);
     assert.equal(store.pages, 9);
     assert.equal(store.products, P.ecommerce.includedProducts);
     assert.equal(switchPackage(business, "landing").pages, 1);
@@ -225,7 +199,7 @@ describe("switching and URL round trips", () => {
     const selection = selectionFromSearchParams(params);
     assert.deepEqual(selection.addOns, ["paymentGateway", "maintenance"]);
     assert.equal(selection.pages, 1);
-    assert.equal(selection.expedited, true);
+    assert.ok(!("expedited" in selection));
   });
 
   test("an old link to a removed package falls back to the empty selection", () => {

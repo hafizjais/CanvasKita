@@ -1,5 +1,5 @@
 import { addOnIds, pricing, type AddOnPricing } from "../../config/pricing.ts";
-import { formatMYR, percentOf, toSen } from "./money.ts";
+import { formatMYR, toSen } from "./money.ts";
 import { normalizeSelection } from "./selection.ts";
 import type { Estimate, LineItem, QuoteSelection } from "./types.ts";
 
@@ -69,14 +69,8 @@ export function calculateEstimate(input: Partial<QuoteSelection>): Estimate {
       continue;
     }
 
-    const amount = addOn.kind === "percent" ? percentOf(base, addOn.amount) : toSen(addOn.amount);
-    const detail =
-      addOn.kind === "percent"
-        ? `${addOn.amount}% of the ${formatMYR(base)} base package`
-        : addOn.isStartingPrice
-          ? "Starting price, confirmed once the platform is known"
-          : undefined;
-    oneTime.push({ id, label: addOn.label, detail, amount, isStartingPrice: addOn.isStartingPrice });
+    const detail = addOn.isStartingPrice ? "Starting price, confirmed once the platform is known" : undefined;
+    oneTime.push({ id, label: addOn.label, detail, amount: toSen(addOn.amount), isStartingPrice: addOn.isStartingPrice });
 
     if (addOn.coversPages && selection.pages > addOn.coversPages) {
       quotedSeparately.push({
@@ -102,18 +96,6 @@ export function calculateEstimate(input: Partial<QuoteSelection>): Estimate {
       label: "Additional payment gateways or advanced shipping",
       amount: null,
     });
-  }
-
-  if (selection.expedited) {
-    const subtotal = oneTime.reduce((sum, line) => sum + (line.amount ?? 0), 0);
-    oneTime.push({
-      id: "expedited",
-      label: "Expedited delivery",
-      detail: `${pricing.expedited.percent}% of the ${formatMYR(subtotal)} project subtotal`,
-      amount: percentOf(subtotal, pricing.expedited.percent),
-      isStartingPrice: oneTime.some((line) => line.isStartingPrice),
-    });
-    notes.push("Expedited delivery is subject to availability and confirmed with the schedule.");
   }
 
   if (selection.addOns.includes("secondLanguage")) {
