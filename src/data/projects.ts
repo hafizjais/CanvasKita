@@ -81,6 +81,19 @@ export const projects: Project[] = [
     type: "own",
     images: imagesFor("financial-hafiz"),
   },
+  {
+    slug: "bakawali-spa",
+    name: "Bakawali Spa",
+    domain: "bakawalispa.vercel.app",
+    url: "https://bakawalispa.vercel.app/en",
+    category: "Spa & Wellness",
+    industry: "Malay spa, Taman Universiti, Skudai",
+    language: "English & Bahasa Malaysia",
+    summary:
+      "A bilingual website for a Malay spa, listing every treatment and package with its price and sending visitors to online booking.",
+    type: "client",
+    images: imagesFor("bakawali-spa"),
+  },
 ];
 
 export const projectTypeLabel = { client: "Client project", own: "Own project" } as const;

@@ -7,6 +7,8 @@ import { track } from "@/lib/analytics";
 type Props = {
   location: string;
   label?: string;
+  /** Pre-filled WhatsApp message; defaults to the site-wide greeting. */
+  message?: string;
   variant?: Parameters<typeof buttonClasses>[0];
   size?: Parameters<typeof buttonClasses>[1];
   className?: string;
@@ -21,12 +23,13 @@ type Props = {
 export function ContactCta({
   location,
   label = "Start a WhatsApp Conversation",
+  message,
   variant = "accent",
   size = "lg",
   className = "",
   fallback = "form",
 }: Props) {
-  const whatsappUrl = getWhatsAppUrl();
+  const whatsappUrl = getWhatsAppUrl(message);
 
   if (!whatsappUrl) {
     if (fallback === "none") return null;

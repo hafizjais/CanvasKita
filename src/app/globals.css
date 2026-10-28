@@ -91,23 +91,6 @@
     @apply mx-auto w-full max-w-[78rem] px-5 sm:px-8 lg:px-10;
   }
 
-  .eyebrow {
-    @apply inline-flex items-center gap-3 text-[0.78rem] font-semibold uppercase tracking-[0.14em] text-muted;
-  }
-
-  .eyebrow::before {
-    content: "";
-    @apply h-px w-7 bg-accent;
-  }
-
-  .on-dark .eyebrow {
-    @apply text-on-dark-muted;
-  }
-
-  .on-dark .eyebrow::before {
-    @apply bg-accent-bright;
-  }
-
   .link-underline {
     background-image: linear-gradient(currentColor, currentColor);
     background-size: 0% 1px;

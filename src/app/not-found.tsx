@@ -10,8 +10,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="container-page flex min-h-[60vh] flex-col items-start justify-center py-20">
-      <p className="eyebrow">Page not found</p>
-      <h1 className="mt-5 max-w-xl text-[2.4rem] leading-tight font-semibold sm:text-5xl">
+      <h1 className="max-w-xl text-[2.4rem] leading-tight font-semibold sm:text-5xl">
         This page doesn&rsquo;t exist, or has moved.
       </h1>
       <p className="mt-4 max-w-lg text-lg text-muted">

@@ -13,8 +13,7 @@ export default function GetQuotePage() {
   return (
     <div className="container-page py-12 sm:py-16 print:p-0">
       <header className="max-w-3xl print:hidden">
-        <p className="eyebrow">Build your website plan</p>
-        <h1 className="mt-5 text-[2.5rem] leading-[1.03] font-semibold sm:text-[3.4rem]">
+        <h1 className="text-[2.5rem] leading-[1.03] font-semibold sm:text-[3.4rem]">
           See what your website will cost.
         </h1>
         <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">

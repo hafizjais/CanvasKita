@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { flushSync } from "react-dom";
-import { ArrowLeft, ArrowRight, Check, MessageCircle, Minus, Plus, Printer, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, MessageCircle, Minus, Plus, Printer, RotateCcw } from "lucide-react";
 import { EstimateDocument } from "@/components/quote/estimate-document";
 import { EstimateSummary } from "@/components/quote/estimate-summary";
 import { QuoteEnquiryForm } from "@/components/quote/quote-enquiry-form";
@@ -222,8 +222,7 @@ export function QuoteBuilder() {
   const uid = useId();
 
   const estimate = useMemo(() => calculateEstimate(selection), [selection]);
-  const steps: StepId[] =
-    estimate.status === "requiresQuotation" ? ["type", "scope", "enquiry"] : ["type", "scope", "addons", "estimate", "enquiry"];
+  const steps: StepId[] = ["type", "scope", "addons", "estimate", "enquiry"];
   const stepIndex = Math.max(0, steps.indexOf(step));
   const pkg = selection.packageId ? pricing.packages[selection.packageId] : null;
 
@@ -322,8 +321,7 @@ export function QuoteBuilder() {
                   />
                 </span>
                 <span className="mt-1 text-sm text-accent">
-                  {option.requiresQuotation ? "Detailed quotation, from " : "From "}
-                  {formatMYR(toSen(option.basePrice))}
+                  From {formatMYR(toSen(option.basePrice))}
                 </span>
                 <span className="mt-2 text-sm leading-relaxed text-muted">{servicePackages[id].summary}</span>
               </label>
@@ -341,33 +339,7 @@ export function QuoteBuilder() {
 
   const scopeStep = pkg && selection.packageId && (
     <section aria-labelledby={headingId}>
-      {pkg.requiresQuotation ? (
-        <>
-          <StepHeading id={headingId} intro="Custom systems are scoped individually, so there's no instant price.">
-            Your custom requirements
-          </StepHeading>
-          <div className="rounded-xl border border-ink/12 bg-card p-6">
-            <p className="font-display text-xl font-semibold">Requires detailed quotation</p>
-            <p className="mt-2 leading-relaxed text-graphite">
-              Portals, dashboards, internal tools and integrations vary too much to price from a form. Projects usually
-              start from {formatMYR(toSen(pkg.basePrice))}, which is a guide only. Send a short description and
-              I&rsquo;ll arrange a discovery conversation, review the technical scope, and follow up with a written
-              quotation.
-            </p>
-            <ul className="mt-5 space-y-2 text-sm text-graphite">
-              {["Who will use the system, and for what", "The main tasks or workflows it must handle", "Tools or data it needs to connect to", "Any deadline or budget range"].map(
-                (item) => (
-                  <li key={item} className="flex gap-2.5">
-                    <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-accent" />
-                    {item}
-                  </li>
-                ),
-              )}
-            </ul>
-          </div>
-        </>
-      ) : (
-        <>
+      <>
           <StepHeading id={headingId} intro={`The ${pkg.name} includes ${pkg.includedPages === 1 ? "one page" : `${pkg.includedPages} pages`}${pkg.includedProducts ? ` and ${pkg.includedProducts} product listings` : ""}. Adjust the scope to suit your business.`}>
             Configure your requirements
           </StepHeading>
@@ -380,7 +352,7 @@ export function QuoteBuilder() {
                 value={selection.pages}
                 min={pkg.includedPages}
                 max={pkg.maxPages}
-                hint={`${pkg.includedPages} included. Extra pages are ${formatMYR(toSen(pricing.extraPagePrice))} each. Need more than ${pkg.maxPages}? Choose a custom quotation.`}
+                hint={`${pkg.includedPages} included. Extra pages are ${formatMYR(toSen(pricing.extraPagePrice))} each. Need more than ${pkg.maxPages}? Contact me for a quotation.`}
                 onCommit={(pages) => update({ ...selection, pages })}
               />
             ) : (
@@ -458,8 +430,7 @@ export function QuoteBuilder() {
               />
             )}
           </div>
-        </>
-      )}
+      </>
     </section>
   );
 
@@ -559,18 +530,13 @@ export function QuoteBuilder() {
     <section aria-labelledby={headingId}>
       <StepHeading
         id={headingId}
-        intro={
-          estimate.status === "requiresQuotation"
-            ? "Tell me what you need and I'll arrange a discovery conversation. No commitment."
-            : `Send estimate ${doc.reference} with your details and I'll reply to discuss it. No commitment.`
-        }
+        intro={`Send estimate ${doc.reference} with your details and I'll reply to discuss it. No commitment.`}
       >
         Send your enquiry
       </StepHeading>
       <QuoteEnquiryForm
         selectionQuery={selectionToSearchParams(selection).toString()}
         reference={doc.reference}
-        requiresDescription={estimate.status === "requiresQuotation"}
         estimateText={estimateToText(estimate, doc.reference)}
         whatsappMessage={estimateToWhatsAppMessage(estimate, doc.reference)}
       />
@@ -602,7 +568,7 @@ export function QuoteBuilder() {
 
   const nextStep = steps[stepIndex + 1];
   const previousStep = steps[stepIndex - 1];
-  const nextLabel = nextStep === "estimate" ? "View Estimate" : nextStep === "enquiry" ? (estimate.status === "requiresQuotation" ? "Describe Your Requirements" : "Send as Enquiry") : "Continue";
+  const nextLabel = nextStep === "estimate" ? "View Estimate" : nextStep === "enquiry" ? "Send as Enquiry" : "Continue";
 
   return (
     <>

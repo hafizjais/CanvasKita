@@ -19,8 +19,7 @@ export default function PrivacyPage() {
 
   return (
     <div className="container-page max-w-3xl py-14 sm:py-20">
-      <p className="eyebrow">Privacy</p>
-      <h1 className="mt-5 text-[2.4rem] leading-tight font-semibold sm:text-5xl">Privacy notice</h1>
+      <h1 className="text-[2.4rem] leading-tight font-semibold sm:text-5xl">Privacy notice</h1>
       <p className="mt-4 text-muted">Last updated {siteConfig.privacyLastUpdated}</p>
 
       <div className="mt-10 space-y-8 text-lg leading-relaxed text-graphite [&_h2]:mb-3 [&_h2]:text-2xl [&_h2]:font-semibold [&_h2]:text-ink">

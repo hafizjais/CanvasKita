@@ -6,8 +6,7 @@ export function Faq() {
     <section aria-labelledby="faq-title" className="border-t border-ink/10 py-20 sm:py-28">
       <div className="container-page grid gap-10 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <p className="eyebrow">FAQ</p>
-          <h2 id="faq-title" className="mt-5 text-[2.3rem] leading-[1.05] font-semibold sm:text-5xl">
+          <h2 id="faq-title" className="text-[2.3rem] leading-[1.05] font-semibold sm:text-5xl">
             Questions, answered.
           </h2>
           <p className="mt-5 max-w-sm leading-relaxed text-muted">

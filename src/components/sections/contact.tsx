@@ -19,8 +19,7 @@ export function Contact() {
     <section id="contact" aria-labelledby="contact-title" className="on-dark bg-charcoal text-on-dark">
       <div className="container-page grid gap-14 py-20 sm:py-28 lg:grid-cols-12 lg:gap-12">
         <div className="lg:col-span-5">
-          <p className="eyebrow">Start a project</p>
-          <h2 id="contact-title" className="mt-5 text-[2.4rem] leading-[1.03] font-semibold sm:text-[3.4rem]">
+          <h2 id="contact-title" className="text-[2.4rem] leading-[1.03] font-semibold sm:text-[3.4rem]">
             Let&rsquo;s build something your business can be proud of.
           </h2>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-on-dark-muted">

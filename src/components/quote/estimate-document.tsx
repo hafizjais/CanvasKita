@@ -76,20 +76,11 @@ export function EstimateDocument({
       <h1 className="mt-6 text-[20pt] leading-tight font-semibold">Preliminary website estimate</h1>
       <p className="mt-1 text-muted">
         {estimate.packageName}
-        {estimate.status === "priced" && estimate.selection.pages > 1 ? ` · ${estimate.selection.pages} pages` : ""}
-        {estimate.status === "priced" && estimate.selection.products ? ` · ${estimate.selection.products} products` : ""}
+        {estimate.selection.pages > 1 ? ` · ${estimate.selection.pages} pages` : ""}
+        {estimate.selection.products ? ` · ${estimate.selection.products} products` : ""}
       </p>
 
-      {estimate.status === "requiresQuotation" ? (
-        <Section title="Pricing">
-          <p className="text-[13pt] font-semibold">Requires detailed quotation</p>
-          <p className="mt-2">
-            Custom systems are priced after a discovery and technical scope review. Projects of this kind usually start
-            from {formatMYR(estimate.startingFrom)}. This is a guide only, not a total or a quotation.
-          </p>
-        </Section>
-      ) : (
-        <>
+      <>
           <Section title="Itemised scope and pricing (one-time)">
             <table className="w-full border-collapse">
               <thead>
@@ -147,8 +138,7 @@ export function EstimateDocument({
               </p>
             )}
           </Section>
-        </>
-      )}
+      </>
 
       <div className="grid grid-cols-2 gap-x-8">
         <Section title="Package inclusions">
@@ -161,7 +151,7 @@ export function EstimateDocument({
         <Section title="Timeline and support">
           <p>
             <span className="text-muted">Indicative timeline: </span>
-            {estimate.status === "priced" ? `${describeTimeline(estimate.timelineWeeks)} from receipt of content` : "Confirmed after discovery"}
+            {`${describeTimeline(estimate.timelineWeeks)} from receipt of content`}
           </p>
           <p className="mt-1">
             <span className="text-muted">Revisions: </span>
@@ -174,7 +164,7 @@ export function EstimateDocument({
         </Section>
       </div>
 
-      {estimate.status === "priced" && estimate.notes.length > 0 && (
+      {estimate.notes.length > 0 && (
         <Section title="Notes">
           <ul className="list-disc space-y-0.5 pl-4">
             {estimate.notes.map((note) => (

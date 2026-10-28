@@ -23,8 +23,7 @@ export function readQuoteEnquiry(formData: FormData): QuoteEnquiryValues {
   ) as QuoteEnquiryValues;
 }
 
-/** Custom systems have no priced scope, so a description is required for them. */
-export function validateQuoteEnquiry(values: QuoteEnquiryValues, requiresDescription: boolean): QuoteEnquiryErrors {
+export function validateQuoteEnquiry(values: QuoteEnquiryValues): QuoteEnquiryErrors {
   const errors: QuoteEnquiryErrors = {};
 
   if (!values.name) errors.name = "Please tell me your name.";
@@ -35,9 +34,7 @@ export function validateQuoteEnquiry(values: QuoteEnquiryValues, requiresDescrip
   if (!values.contact) errors.contact = "Add an email address or phone number so I can reply.";
   else if (!isValidContact(values.contact)) errors.contact = "Enter a valid email address or phone number.";
 
-  if (requiresDescription && values.notes.length < limits.messageMin)
-    errors.notes = "Describe what the system needs to do, so I can prepare a quotation.";
-  else if (values.notes.length > limits.message) errors.notes = `Please keep this under ${limits.message} characters.`;
+  if (values.notes.length > limits.message) errors.notes = `Please keep this under ${limits.message} characters.`;
 
   return errors;
 }

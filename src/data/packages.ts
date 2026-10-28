@@ -61,13 +61,6 @@ export const servicePackages: Record<PackageId, ServicePackage> = {
     ],
     note: "Complex scheduling and additional payment integrations are quoted separately.",
   },
-  custom: {
-    id: "custom",
-    summary:
-      "Portals, dashboards, internal tools and integrations built around how your business actually works.",
-    features: ["Bespoke requirements", "Discovery and technical scope review", "Detailed written quotation"],
-    note: "The starting price is a guide only. Every custom project is quoted after a scope review.",
-  },
 };
 
 /** Display order in the Services comparison: cheapest first (see packageIds in pricing.ts). */

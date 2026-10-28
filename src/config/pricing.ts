@@ -9,7 +9,7 @@
  * run directly with Node (npm test).
  */
 
-export type PackageId = "landing" | "portfolio" | "business" | "ecommerce" | "booking" | "custom";
+export type PackageId = "landing" | "portfolio" | "business" | "ecommerce" | "booking";
 
 export type AddOnId =
   | "copywriting"
@@ -36,8 +36,6 @@ export type PackagePricing = {
   timelineWeeks: [min: number, max: number] | null;
   /** Add-ons already part of this package, so they are never charged twice. */
   includedAddOns: AddOnId[];
-  /** True when the package can't be priced by the estimator (custom systems). */
-  requiresQuotation: boolean;
 };
 
 export type AddOnPricing = {
@@ -90,37 +88,34 @@ export const pricing = {
   packages: {
     landing: {
       name: "Landing Page",
-      basePrice: 170,
+      basePrice: 280,
       includedPages: 1,
       maxPages: 1,
       includedProducts: 0,
       timelineWeeks: [1, 2],
       includedAddOns: [],
-      requiresQuotation: false,
     },
     portfolio: {
       name: "Portfolio Website",
-      basePrice: 240,
+      basePrice: 350,
       includedPages: 5,
       maxPages: 30,
       includedProducts: 0,
       timelineWeeks: [2, 3],
       includedAddOns: [],
-      requiresQuotation: false,
     },
     business: {
       name: "Business Website",
-      basePrice: 380,
+      basePrice: 680,
       includedPages: 5,
       maxPages: 30,
       includedProducts: 0,
       timelineWeeks: [3, 4],
       includedAddOns: [],
-      requiresQuotation: false,
     },
     ecommerce: {
       name: "E-commerce Website",
-      basePrice: 600,
+      basePrice: 790,
       // Store pages (shop, product, cart, checkout) come with the platform;
       // this counts the standard content pages such as Home, About and Contact.
       includedPages: 5,
@@ -128,27 +123,15 @@ export const pricing = {
       includedProducts: 10,
       timelineWeeks: [4, 6],
       includedAddOns: ["paymentGateway"],
-      requiresQuotation: false,
     },
     booking: {
       name: "Booking & Reservation Website",
-      basePrice: 440,
+      basePrice: 490,
       includedPages: 5,
       maxPages: 30,
       includedProducts: 0,
       timelineWeeks: [3, 5],
       includedAddOns: [],
-      requiresQuotation: false,
-    },
-    custom: {
-      name: "Custom Website / Web System",
-      basePrice: 800,
-      includedPages: 0,
-      maxPages: 0,
-      includedProducts: 0,
-      timelineWeeks: null,
-      includedAddOns: [],
-      requiresQuotation: true,
     },
   } satisfies Record<PackageId, PackagePricing>,
 
@@ -225,11 +208,9 @@ export const pricing = {
   estimate: {
     referencePrefix: "HMJ",
     validityDays: 14,
-    // TODO: set these once your terms are confirmed, e.g. 2 and "14 days of
-    // post-launch fixes". While null, the estimate says they will be confirmed
-    // in the formal quotation.
-    revisionRounds: null as number | null,
-    postLaunchSupport: null as string | null,
+    // Set to null to say "confirmed in the formal quotation" instead.
+    revisionRounds: 2 as number | null,
+    postLaunchSupport: "14-day post-launch support for bugs in the agreed scope" as string | null,
   },
 
   exclusions: [
@@ -251,9 +232,8 @@ export const pricing = {
   ],
 };
 
-/** Packages from cheapest to most expensive, with quotation-only packages last. */
-export const packageIds = (Object.keys(pricing.packages) as PackageId[]).sort((a, b) => {
-  const [x, y] = [pricing.packages[a], pricing.packages[b]];
-  return Number(x.requiresQuotation) - Number(y.requiresQuotation) || x.basePrice - y.basePrice;
-});
+/** Packages from cheapest to most expensive. */
+export const packageIds = (Object.keys(pricing.packages) as PackageId[]).sort(
+  (a, b) => pricing.packages[a].basePrice - pricing.packages[b].basePrice,
+);
 export const addOnIds = Object.keys(pricing.addOns) as AddOnId[];

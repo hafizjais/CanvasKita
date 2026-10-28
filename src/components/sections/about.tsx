@@ -30,8 +30,7 @@ export function About() {
         </div>
 
         <div className="lg:col-span-7 lg:pt-4">
-          <p className="eyebrow">About</p>
-          <h2 id="about-title" className="mt-5 text-[2.3rem] leading-[1.05] font-semibold sm:text-5xl">
+          <h2 id="about-title" className="text-[2.3rem] leading-[1.05] font-semibold sm:text-5xl">
             Hello, I&rsquo;m Hafiz.
           </h2>
           <div className="mt-6 max-w-2xl space-y-5 text-lg leading-relaxed text-graphite">

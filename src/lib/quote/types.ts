@@ -32,13 +32,6 @@ export type Estimate =
       status: "empty";
     }
   | {
-      status: "requiresQuotation";
-      packageId: PackageId;
-      packageName: string;
-      /** Indicative starting point in sen, never presented as a total. */
-      startingFrom: number;
-    }
-  | {
       status: "priced";
       packageId: PackageId;
       packageName: string;

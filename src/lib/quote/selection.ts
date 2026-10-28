@@ -66,8 +66,6 @@ export function normalizeSelection(input: Partial<QuoteSelection>): QuoteSelecti
   if (!packageId) return { ...emptySelection };
 
   const pkg = pricing.packages[packageId];
-  if (pkg.requiresQuotation) return { ...emptySelection, packageId };
-
   const minPages = Math.max(1, pkg.includedPages);
   const isStore = pkg.includedProducts > 0;
   const addOns = Array.isArray(input.addOns) ? input.addOns : [];
@@ -91,7 +89,6 @@ export function selectionToSearchParams(selection: QuoteSelection) {
   if (!selection.packageId) return params;
   params.set("package", selection.packageId);
   const pkg = pricing.packages[selection.packageId];
-  if (pkg.requiresQuotation) return params;
   if (selection.pages !== pkg.includedPages) params.set("pages", String(selection.pages));
   if (selection.products !== pkg.includedProducts) params.set("products", String(selection.products));
   if (selection.addOns.length) params.set("addons", selection.addOns.join(","));

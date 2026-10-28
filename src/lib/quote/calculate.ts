@@ -15,7 +15,6 @@ const plural = (count: number, word: string) => `${count} ${word}${count === 1 ?
  * - Add-ons included in a package, or unavailable for it, are never charged
  *   (normalizeSelection removes them first).
  * - Items that need review are listed with no price ("quoted separately").
- * - Custom systems are never given a total.
  */
 export function calculateEstimate(input: Partial<QuoteSelection>): Estimate {
   const selection = normalizeSelection(input);
@@ -24,10 +23,6 @@ export function calculateEstimate(input: Partial<QuoteSelection>): Estimate {
 
   const pkg = pricing.packages[packageId];
   const base = toSen(pkg.basePrice);
-
-  if (pkg.requiresQuotation) {
-    return { status: "requiresQuotation", packageId, packageName: pkg.name, startingFrom: base };
-  }
 
   const oneTime: LineItem[] = [];
   const recurring: LineItem[] = [];

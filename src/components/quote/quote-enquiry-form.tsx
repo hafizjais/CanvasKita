@@ -23,13 +23,12 @@ type Props = {
   /** The selection as a query string; the server recalculates the estimate from it. */
   selectionQuery: string;
   reference: string;
-  requiresDescription: boolean;
   /** The estimate as text and as a WhatsApp message, for the fallback when delivery fails. */
   estimateText: string;
   whatsappMessage: string;
 };
 
-export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescription, estimateText, whatsappMessage }: Props) {
+export function QuoteEnquiryForm({ selectionQuery, reference, estimateText, whatsappMessage }: Props) {
   const [state, formAction, pending] = useActionState(submitQuoteEnquiry, initialQuoteEnquiryState);
   const [clientErrors, setClientErrors] = useState<QuoteEnquiryErrors | null>(null);
   const enhanced = useSyncExternalStore(subscribeNoop, () => true, () => false);
@@ -54,7 +53,7 @@ export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescriptio
   }
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
-    const found = validateQuoteEnquiry(readQuoteEnquiry(new FormData(event.currentTarget)), requiresDescription);
+    const found = validateQuoteEnquiry(readQuoteEnquiry(new FormData(event.currentTarget)));
     if (Object.keys(found).length > 0) {
       event.preventDefault();
       setClientErrors(found);
@@ -75,11 +74,6 @@ export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescriptio
       </div>
     );
   }
-
-  const notesLabel = requiresDescription ? "What does the system need to do?" : "Anything else I should know?";
-  const notesHint = requiresDescription
-    ? "Who will use it, the main tasks it must handle, and any tools it should connect to."
-    : "Your business, deadlines, or features you're unsure about.";
 
   return (
     <form
@@ -145,17 +139,15 @@ export function QuoteEnquiryForm({ selectionQuery, reference, requiresDescriptio
           <FormField
             prefix={PREFIX}
             id="notes"
-            label={notesLabel}
-            optional={!requiresDescription}
+            label="Anything else I should know?"
+            optional
             error={errors.notes}
-            hint={notesHint}
+            hint="Your business, deadlines, or features you're unsure about."
           >
             <textarea
               id="quote-notes"
               name="notes"
               rows={4}
-              required={requiresDescription}
-              minLength={requiresDescription ? limits.messageMin : undefined}
               maxLength={limits.message}
               defaultValue={values.notes}
               aria-invalid={Boolean(errors.notes)}

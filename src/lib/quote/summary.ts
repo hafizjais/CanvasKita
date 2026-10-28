@@ -29,7 +29,6 @@ export const formatDate = (date: Date) => `${date.getDate()} ${MONTHS[date.getMo
 /** The headline figure, worded honestly for each kind of estimate. */
 export function describeTotal(estimate: Estimate) {
   if (estimate.status === "empty") return "Choose a website type";
-  if (estimate.status === "requiresQuotation") return "Requires detailed quotation";
   return `${estimate.oneTimeIsMinimum ? "From " : ""}${formatMYR(estimate.oneTimeTotal)}`;
 }
 
@@ -37,11 +36,6 @@ export function describeTotal(estimate: Estimate) {
 export function estimateToText(estimate: Estimate, reference?: string) {
   if (estimate.status === "empty") return "No website type selected.";
   const lines = [reference ? `Estimate ${reference}` : "Estimate", `Package: ${estimate.packageName}`];
-
-  if (estimate.status === "requiresQuotation") {
-    lines.push(`Requires detailed quotation (projects start from ${formatMYR(estimate.startingFrom)})`);
-    return lines.join("\n");
-  }
 
   const { selection } = estimate;
   lines.push(`Pages: ${selection.pages}${selection.products ? ` · Products: ${selection.products}` : ""}`);
@@ -70,10 +64,6 @@ export function estimateToWhatsAppMessage(estimate: Estimate, reference?: string
   }
 
   const ref = reference ? ` (estimate ${reference})` : "";
-
-  if (estimate.status === "requiresQuotation") {
-    return `Hi Hafiz, I'd like a quotation for a ${estimate.packageName}${ref}. Can we discuss my requirements?`;
-  }
 
   const { selection } = estimate;
   const scope = [

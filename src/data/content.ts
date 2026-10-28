@@ -86,14 +86,39 @@ export const faqs = [
       "It depends on the number of pages, the content, and any features or integrations you need. After a short conversation about your requirements you will receive a written quotation with the scope and deliverables, before any work begins.",
   },
   {
-    question: "How long does a typical project take?",
+    question: "How long does it take to build my website?",
     answer:
-      "It depends on the scope and on how quickly content and feedback are ready. A focused landing page is usually quicker than a multi-page site with listings or custom features. Your quotation includes an estimated schedule.",
+      "Most standard websites take around 1–2 weeks once the project is confirmed and the required materials are ready. More complex websites may require additional time. Your estimated timeline will be stated in the quotation.",
   },
   {
-    question: "Do you provide domain and hosting setup?",
+    question: "How does payment work?",
     answer:
-      "A custom domain is included with every website. I can also advise on hosting and help set it up, or work with what you already have. We confirm the details in your quotation.",
+      "Typically, a 50% deposit is required to begin the project, with the remaining 50% payable after approval and before the website goes live. The written quotation confirms the payment terms for your project.",
+  },
+  {
+    question: "What do you need from me before starting?",
+    answer:
+      "I may need your logo, business information, website content, images, contact details and any relevant product or service information. I'll confirm the requirements before development begins.",
+  },
+  {
+    question: "How many revisions are included?",
+    answer:
+      "Two revision rounds are included in the standard scope unless your quotation specifies otherwise. Additional pages, features or requests outside the agreed requirements may be quoted separately.",
+  },
+  {
+    question: "What is the 14-day hypercare period?",
+    answer:
+      "It is a 14-day support period after launch for reporting bugs related to the agreed website functionality. It does not automatically include new features or ongoing maintenance.",
+  },
+  {
+    question: "Are domain and hosting included in the website price?",
+    answer:
+      "A custom domain is included with every website. Hosting arrangements depend on your project and will be outlined in your quotation. Any annual renewals and third-party charges will be explained separately.",
+  },
+  {
+    question: "What happens after the first year?",
+    answer:
+      "Your domain and hosting may need to be renewed annually. I'll explain the relevant renewal dates and charges for your setup. Optional website maintenance can be arranged separately.",
   },
   {
     question: "Will the website work on mobile devices?",
@@ -101,9 +126,9 @@ export const faqs = [
       "Yes. Every site is designed to be responsive and is checked on phone, tablet and desktop screen sizes before launch.",
   },
   {
-    question: "Can I update the website after launch?",
+    question: "Can I request changes after handover?",
     answer:
-      "Yes. Depending on how the site is built, you can either edit content yourself or ask me to make changes. We agree which approach suits you during planning.",
+      "Yes. You can request additional updates or discuss an ongoing maintenance arrangement. New features and changes outside the original scope may incur additional charges.",
   },
   {
     question: "Do you provide maintenance and support?",

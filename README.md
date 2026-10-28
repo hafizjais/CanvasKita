@@ -36,7 +36,7 @@ Content that is likely to change (services, benefits, process steps, FAQs, crede
 
 ## Packages and the price estimator
 
-The homepage Services section compares six website packages, each with a "Customise This Plan" link that opens the estimator with that type selected. The estimator at **`/get-quote`** lets visitors configure a package and see an itemised estimate in MYR, print it or save it as a PDF, send it on WhatsApp, or submit it as an enquiry. No contact details are needed to see a price.
+The homepage Services section compares five website packages, each with a "Customise This Plan" link that opens the estimator with that type selected. The estimator at **`/get-quote`** lets visitors configure a package and see an itemised estimate in MYR, print it or save it as a PDF, send it on WhatsApp, or submit it as an enquiry. No contact details are needed to see a price.
 
 **To change prices, edit `src/config/pricing.ts`.** It is the only place figures live:
 
@@ -52,14 +52,14 @@ The homepage Services section compares six website packages, each with a "Custom
 | Estimate validity, reference prefix, revisions, post-launch support | `pricing.estimate` |
 | Exclusions and assumptions printed on the estimate | `pricing.exclusions`, `pricing.assumptions` |
 
-Package descriptions, inclusions and display order are in `src/data/packages.ts`. After changing prices, run `npm test`. A few tests check today's figures (for example RM380 for a business website), so update them when you change those prices.
+Package descriptions, inclusions and display order are in `src/data/packages.ts`. After changing prices, run `npm test`. The tests read their expected figures from `pricing.ts`, so a price change won't break them; they check the rules (included pages, no double charging, separate recurring costs).
 
 How estimates are calculated (`src/lib/quote/calculate.ts`):
 - Amounts are integer sen, so totals are exact.
 - Monthly maintenance is listed separately and never added to the project total. A first-year figure appears only when every one-time item has a fixed price.
 - Add-ons included in a package, or not offered for it, are removed before pricing.
 - Starting-price add-ons, and copywriting or SEO beyond five pages, make the total read "From …". Complex booking and advanced commerce needs are listed as "Quoted separately", with no price.
-- Custom systems never get a total. They show "Requires detailed quotation".
+- Anything the estimator can't price (such as complex booking rules) is listed as "Quoted separately" and never given a price. Fully custom work isn't a package: clients contact you directly for a quotation.
 - When an estimate enquiry is submitted, the server recalculates the estimate from the selected options, so prices sent from the browser are never trusted.
 
 Printing uses the browser's own dialog ("Save as PDF"). The printable layout is `src/components/quote/estimate-document.tsx`.

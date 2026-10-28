@@ -23,7 +23,7 @@ export const siteConfig = {
   locale: "en_MY",
 
   contact: {
-    email: "studiopeacecraft@gmail.com",
+    email: "hafizdigitalweb@gmail.com",
     whatsappNumber: "601163063150",
     whatsappMessage:
       "Hi Hafiz, I found your website and I'd like to discuss a website project for my business.",
@@ -64,7 +64,7 @@ export const BUDGET_OTHER = "Other (enter your own amount)";
 
 /** Options shown in the enquiry form. */
 export const enquiryOptions = {
-  // The six website packages (cheapest first), the services for existing
+  // The five website packages (cheapest first), the services for existing
   // websites, and a catch-all. Names come from pricing.ts and content.ts, so
   // the dropdown always matches the Services section.
   websiteTypes: [

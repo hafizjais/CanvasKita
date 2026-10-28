@@ -23,7 +23,7 @@ export async function submitQuoteEnquiry(previous: QuoteEnquiryState, formData: 
     return { status: "error", message: "Please choose a website type before sending.", values, attempt };
   }
 
-  const errors = validateQuoteEnquiry(values, estimate.status === "requiresQuotation");
+  const errors = validateQuoteEnquiry(values);
   if (Object.keys(errors).length > 0) {
     return { status: "error", message: "Please check the highlighted fields.", errors, values, attempt };
   }

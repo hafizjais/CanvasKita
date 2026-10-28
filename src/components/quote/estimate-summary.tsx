@@ -26,20 +26,6 @@ export function EstimateSummary({ estimate, variant = "full" }: { estimate: Esti
     );
   }
 
-  if (estimate.status === "requiresQuotation") {
-    return (
-      <div>
-        <p className="text-sm text-muted">{estimate.packageName}</p>
-        <p className="mt-2 font-display text-2xl leading-tight font-semibold">Requires detailed quotation</p>
-        <p className="mt-3 text-sm leading-relaxed text-graphite">
-          Custom systems are priced after a discovery and technical scope review. Projects usually start from{" "}
-          {formatMYR(estimate.startingFrom)}, but that is a guide, not a total.
-        </p>
-        <DomainHighlight variant="line" />
-      </div>
-    );
-  }
-
   const rowText = compact ? "text-sm" : "text-[0.95rem]";
 
   return (

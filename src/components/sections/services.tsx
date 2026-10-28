@@ -8,15 +8,14 @@ import { packageOrder, servicePackages } from "@/data/packages";
 import { track } from "@/lib/analytics";
 import { formatMYR, toSen } from "@/lib/quote/money";
 
-/** Six website types compared in one compact list. Prices come from src/config/pricing.ts. */
+/** Five website types compared in one compact list. Prices come from src/config/pricing.ts. */
 export function Services() {
   return (
     <section id="services" aria-labelledby="services-title" className="bg-card py-20 sm:py-28">
       <div className="container-page">
         <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-7">
-            <p className="eyebrow">Services &amp; packages</p>
-            <h2 id="services-title" className="mt-5 text-[2.3rem] leading-[1.05] font-semibold sm:text-5xl">
+            <h2 id="services-title" className="text-[2.3rem] leading-[1.05] font-semibold sm:text-5xl">
               Website packages, clearly priced.
             </h2>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted">
@@ -52,8 +51,7 @@ export function Services() {
           <ul>
             {packageOrder.map((id) => {
               const pkg = servicePackages[id];
-              const { name, basePrice, requiresQuotation } = pricing.packages[id];
-              const cta = requiresQuotation ? "Request a Quotation" : "Customise This Plan";
+              const { name, basePrice } = pricing.packages[id];
               return (
                 <li
                   key={id}
@@ -81,7 +79,7 @@ export function Services() {
 
                   <div>
                     <p className="flex items-baseline gap-2 lg:block">
-                      <span className="text-sm text-muted lg:block">{requiresQuotation ? "Guide from" : "From"}</span>
+                      <span className="text-sm text-muted lg:block">From</span>
                       <span className="font-display text-[1.6rem] leading-none font-semibold tracking-tight">
                         {formatMYR(toSen(basePrice))}
                       </span>
@@ -93,9 +91,9 @@ export function Services() {
                     <Link
                       href={`/get-quote?package=${id}`}
                       className={buttonClasses("secondary", "md", "w-full whitespace-nowrap sm:w-auto lg:w-full")}
-                      {...track("cta_click", { location: `package_${id}`, label: cta })}
+                      {...track("cta_click", { location: `package_${id}`, label: "Customise This Plan" })}
                     >
-                      {cta}
+                      Customise This Plan
                       <span className="sr-only">: {name}</span>
                       <ArrowRight aria-hidden="true" className="size-4" />
                     </Link>
@@ -105,7 +103,12 @@ export function Services() {
             })}
           </ul>
           <p className="mt-4 text-sm text-muted">
-            Prices in MYR. Hosting, third-party subscriptions and payment processing fees are not included.
+            Prices in MYR. Hosting, third-party subscriptions and payment processing fees are not included. Need
+            something custom?{" "}
+            <a href="#enquiry" className="font-medium text-ink underline decoration-accent underline-offset-4">
+              Contact me directly
+            </a>{" "}
+            for a quotation.
           </p>
         </div>
 
