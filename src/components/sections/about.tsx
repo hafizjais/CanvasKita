@@ -23,9 +23,6 @@ export function About() {
               placeholder="blur"
               className="aspect-[4/5] w-full rounded-2xl object-cover object-[50%_70%]"
             />
-            <p className="absolute -bottom-4 left-5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper">
-              Hafiz · Founder
-            </p>
           </div>
         </div>
 
