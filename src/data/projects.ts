@@ -45,6 +45,19 @@ export const projects: Project[] = [
     images: imagesFor("magna-ibn"),
   },
   {
+    slug: "bakawali-spa",
+    name: "Bakawali Spa",
+    domain: "bakawalispa.vercel.app",
+    url: "https://bakawalispa.vercel.app/en",
+    category: "Spa & Wellness",
+    industry: "Malay spa, Taman Universiti, Skudai",
+    language: "English & Bahasa Malaysia",
+    summary:
+      "A bilingual website for a Malay spa, listing every treatment and package with its price and sending visitors to online booking.",
+    type: "client",
+    images: imagesFor("bakawali-spa"),
+  },
+  {
     slug: "balqismj-property",
     name: "BalqisMJ Property",
     domain: "balqismjproperty.com",
@@ -80,19 +93,6 @@ export const projects: Project[] = [
       "A Bahasa Malaysia landing page that helps visitors understand debt consolidation and start an informed WhatsApp conversation.",
     type: "own",
     images: imagesFor("financial-hafiz"),
-  },
-  {
-    slug: "bakawali-spa",
-    name: "Bakawali Spa",
-    domain: "bakawalispa.vercel.app",
-    url: "https://bakawalispa.vercel.app/en",
-    category: "Spa & Wellness",
-    industry: "Malay spa, Taman Universiti, Skudai",
-    language: "English & Bahasa Malaysia",
-    summary:
-      "A bilingual website for a Malay spa, listing every treatment and package with its price and sending visitors to online booking.",
-    type: "client",
-    images: imagesFor("bakawali-spa"),
   },
 ];
 
