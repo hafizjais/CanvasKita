@@ -26,7 +26,7 @@ function LiveButton({ project }: { project: Project }) {
 }
 
 const cardSurface =
-  "group overflow-hidden rounded-2xl border border-ink/12 bg-card shadow-[0_1px_2px_rgba(22,21,19,0.04)] transition-[border-color,box-shadow,transform] duration-300 hover:border-ink/25 hover:shadow-[0_28px_50px_-32px_rgba(22,21,19,0.5)] motion-safe:hover:-translate-y-1";
+  "group overflow-hidden rounded-2xl border border-ink/12 bg-card shadow-[0_1px_2px_rgba(18,20,24,0.04)] transition-[border-color,box-shadow,transform] duration-300 hover:border-ink/25 hover:shadow-[0_28px_50px_-32px_rgba(18,20,24,0.5)] motion-safe:hover:-translate-y-1";
 
 /** One project: a real screenshot of the site, the name, and a link to the live website. */
 function ProjectCard({ project }: { project: Project }) {
@@ -91,9 +91,9 @@ export function SelectedWork() {
             <Link
               href="/get-quote"
               className={buttonClasses("primary", "md")}
-              {...track("cta_click", { location: "after_portfolio", label: "Get an Estimate" })}
+              {...track("cta_click", { location: "after_portfolio", label: "Get a Quote" })}
             >
-              Get an Estimate
+              Get a Quote
             </Link>
             {hasWhatsApp && (
               <ContactCta location="after_portfolio" label="WhatsApp Me" size="md" variant="secondary" fallback="none" />

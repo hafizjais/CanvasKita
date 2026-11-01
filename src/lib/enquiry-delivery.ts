@@ -33,7 +33,7 @@ function asHtml(heading: string, rows: Submission["rows"]) {
   const body = rows
     .map(
       ([label, value]) =>
-        `<tr><td style="padding:6px 12px 6px 0;color:#5c5850;vertical-align:top">${escapeHtml(label)}</td><td style="padding:6px 0;white-space:pre-wrap">${escapeHtml(value || "—")}</td></tr>`,
+        `<tr><td style="padding:6px 12px 6px 0;color:#555c66;vertical-align:top">${escapeHtml(label)}</td><td style="padding:6px 0;white-space:pre-wrap">${escapeHtml(value || "—")}</td></tr>`,
     )
     .join("");
   return `<h2 style="font-family:sans-serif">${escapeHtml(heading)}</h2><table style="font-family:sans-serif;font-size:15px;border-collapse:collapse">${body}</table>`;

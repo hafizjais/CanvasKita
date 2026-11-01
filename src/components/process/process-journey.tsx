@@ -194,7 +194,7 @@ export function ProcessJourney({ phases }: { phases: JourneyPhase[] }) {
         ))}
       </div>
 
-      <div className="mt-8 rounded-3xl border border-ink/12 bg-card p-6 shadow-[0_24px_48px_-36px_rgba(22,21,19,0.35)] sm:p-10">
+      <div className="mt-8 rounded-3xl border border-ink/12 bg-card p-6 shadow-[0_24px_48px_-36px_rgba(18,20,24,0.35)] sm:p-10">
         <div className="flex flex-col gap-6 border-b border-ink/10 pb-6 sm:flex-row sm:items-start sm:justify-between">
           <div aria-live="polite">
             <p className="text-sm font-semibold text-accent">

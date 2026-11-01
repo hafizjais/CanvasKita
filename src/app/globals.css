@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #f3efe7;
-  --color-paper-deep: #e9e3d6;
-  --color-card: #fbf9f4;
-  --color-ink: #161513;
-  --color-charcoal: #262421;
-  --color-graphite: #3a3733;
-  --color-muted: #5c5850;
-  --color-line: #d8d0c1;
-  --color-line-dark: #3d3a35;
-  --color-accent: #9a4a2c;
-  --color-accent-bright: #d07650;
-  --color-accent-soft: #ead9cc;
-  --color-on-dark: #f3efe7;
-  --color-on-dark-muted: #b1a99c;
+  --color-paper: #eceef1;
+  --color-paper-deep: #e0e4e9;
+  --color-card: #f7f8fa;
+  --color-ink: #121418;
+  --color-charcoal: #1b1e23;
+  --color-graphite: #30353d;
+  --color-muted: #555c66;
+  --color-line: #cdd3da;
+  --color-line-dark: #2c3139;
+  --color-accent: #a3460b;
+  --color-accent-bright: #f08b46;
+  --color-accent-soft: #f7dfcf;
+  --color-on-dark: #eef0f3;
+  --color-on-dark-muted: #9ba4af;
   --color-success: #2f6b4a;
   --color-danger: #a23a2a;
 
@@ -104,6 +104,41 @@
     background-size: 100% 1px;
   }
 
+  /* Hero blueprint: website layers that float apart and settle on scroll. */
+  .blueprint {
+    color: var(--color-on-dark-muted);
+  }
+
+  .blueprint-layer {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform: translate3d(0, calc(var(--e) * var(--i) * -9%), 0);
+    will-change: transform;
+  }
+
+  .blueprint-enter {
+    display: block;
+    height: 100%;
+    animation: blueprint-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--i) * 90ms + 150ms);
+  }
+
+  .blueprint-label {
+    opacity: clamp(0, calc((var(--e) - 0.35) * 2.2), 1);
+  }
+
+  @keyframes blueprint-in {
+    from {
+      opacity: 0;
+      transform: translateY(-14%);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   /* Process journey: phase platforms with restrained 3D depth. */
   .journey-item {
     perspective: 1100px;
@@ -114,7 +149,7 @@
     --ry: 0deg;
     --lift: 0px;
     --depth: 1;
-    --ledge: #ddd5c6;
+    --ledge: #d5dae0;
     position: relative;
     display: block;
     width: 100%;
@@ -128,7 +163,7 @@
     transform: translateY(var(--lift)) rotateX(var(--rx)) rotateY(var(--ry));
     box-shadow:
       0 6px 0 0 var(--ledge),
-      0 30px 44px -30px rgb(22 21 19 / 0.4);
+      0 30px 44px -30px rgb(18 20 24 / 0.4);
     transition:
       transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
       box-shadow 0.45s ease,
@@ -159,7 +194,7 @@
       --depth: 1.9;
       box-shadow:
         0 6px 0 0 var(--ledge),
-        0 46px 60px -34px rgb(22 21 19 / 0.5);
+        0 46px 60px -34px rgb(18 20 24 / 0.5);
     }
   }
 

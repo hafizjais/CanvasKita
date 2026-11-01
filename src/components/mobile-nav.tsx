@@ -39,7 +39,7 @@ export function MobileNav({ links }: Props) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((value) => !value)}
-        className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-ink hover:bg-ink/5"
+        className="-mr-2 inline-flex size-11 items-center justify-center rounded-full text-on-dark hover:bg-on-dark/10"
       >
         {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
         <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
@@ -48,16 +48,16 @@ export function MobileNav({ links }: Props) {
       <div
         id={panelId}
         hidden={!open}
-        className="absolute inset-x-0 top-16 border-b border-ink/10 bg-paper shadow-[0_24px_40px_-30px_rgba(22,21,19,0.5)]"
+        className="absolute inset-x-0 top-16 border-b border-on-dark/10 bg-charcoal shadow-[0_24px_40px_-30px_rgba(18,20,24,0.5)]"
       >
         <nav aria-label="Mobile" className="container-page py-4">
-          <ul className="divide-y divide-ink/10">
+          <ul className="divide-y divide-on-dark/10">
             {links.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="flex py-3.5 font-display text-lg font-medium text-ink"
+                  className="flex py-3.5 font-display text-lg font-medium text-on-dark"
                 >
                   {link.label}
                 </Link>
@@ -67,9 +67,9 @@ export function MobileNav({ links }: Props) {
           <Link
             href="/get-quote"
             onClick={() => setOpen(false)}
-            className={buttonClasses("primary", "lg", "mt-4 mb-2 w-full sm:hidden")}
+            className={buttonClasses("glow", "lg", "mt-4 mb-2 w-full sm:hidden")}
           >
-            Get an Estimate
+            Get a Quote
           </Link>
         </nav>
       </div>

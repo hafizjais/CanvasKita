@@ -27,9 +27,9 @@ export function Services() {
             <Link
               href="/get-quote"
               className={buttonClasses("primary", "lg")}
-              {...track("cta_click", { location: "services", label: "Get an Estimate" })}
+              {...track("cta_click", { location: "services", label: "Get a Quote" })}
             >
-              Get an Estimate
+              Get a Quote
               <ArrowRight aria-hidden="true" className="size-4" />
             </Link>
           </div>

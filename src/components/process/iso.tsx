@@ -17,11 +17,11 @@ export const pts = (...vertices: V[]) =>
 export type Shade = { top: string; left: string; right: string };
 
 export const shades = {
-  plate: { top: "#ece5d8", left: "#dcd3c3", right: "#cbc1ae" },
-  paper: { top: "#fdfbf7", left: "#e9e3d6", right: "#d8d0c1" },
-  ink: { top: "#3a3733", left: "#262421", right: "#161513" },
-  accent: { top: "#b45f3c", left: "#9a4a2c", right: "#7c3a21" },
-  soft: { top: "#f1e3d7", left: "#e2cdbd", right: "#d2b8a5" },
+  plate: { top: "#e6e9ed", left: "#d3d8de", right: "#bfc6ce" },
+  paper: { top: "#fbfcfd", left: "#e1e5ea", right: "#cdd3da" },
+  ink: { top: "#353a42", left: "#1f2328", right: "#121418" },
+  accent: { top: "#e07a35", left: "#c25e1c", right: "#9a4710" },
+  soft: { top: "#f8e3d4", left: "#f0c9ae", right: "#e2b08e" },
 } satisfies Record<string, Shade>;
 
 /** A solid box: its two front faces and top. */
@@ -66,7 +66,7 @@ export const at = (v: V) => project(v);
 /** Soft contact shadow on the plate under a floating object. */
 export function Shadow({ at: v, r }: { at: V; r: number }) {
   const [cx, cy] = project(v);
-  return <ellipse cx={cx} cy={cy} rx={r * 1.22} ry={r * 0.7} fill="#161513" opacity="0.12" />;
+  return <ellipse cx={cx} cy={cy} rx={r * 1.22} ry={r * 0.7} fill="#121418" opacity="0.12" />;
 }
 
 export const VIEWBOX = "-114 -60 228 188";

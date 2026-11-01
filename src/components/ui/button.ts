@@ -1,4 +1,4 @@
-type Variant = "primary" | "secondary" | "accent" | "light" | "ghost-light";
+type Variant = "primary" | "secondary" | "accent" | "light" | "ghost-light" | "glow";
 type Size = "md" | "lg";
 
 const base =
@@ -10,6 +10,8 @@ const variants: Record<Variant, string> = {
   accent: "bg-accent text-paper hover:bg-ink",
   light: "bg-paper text-ink hover:bg-accent-soft",
   "ghost-light": "border border-on-dark/30 text-on-dark hover:border-on-dark hover:bg-on-dark hover:text-ink",
+  /** The logo orange on dark surfaces. */
+  glow: "bg-accent-bright text-ink hover:bg-on-dark",
 };
 
 const sizes: Record<Size, string> = {

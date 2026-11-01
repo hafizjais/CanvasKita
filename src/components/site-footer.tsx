@@ -21,7 +21,7 @@ export function SiteFooter() {
     <footer className="on-dark bg-ink text-on-dark print:hidden">
       <div className="container-page grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-4">
-          <Wordmark tone="light" />
+          <Wordmark />
           <p className="mt-5 max-w-xs leading-relaxed text-on-dark-muted">{siteConfig.positioning}</p>
         </div>
 
@@ -37,7 +37,7 @@ export function SiteFooter() {
             ))}
             <li>
               <Link href="/get-quote" className="link-underline hover:text-on-dark">
-                Get an estimate
+                Get a quote
               </Link>
             </li>
           </ul>

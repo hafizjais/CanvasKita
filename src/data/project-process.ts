@@ -77,7 +77,7 @@ export const projectPhases: ProjectPhase[] = [
 export const processCta = {
   title: "Ready to Start Your Project?",
   primary: "Discuss Your Project",
-  secondary: "Get an Estimate",
+  secondary: "Get a Quote",
   whatsappMessage:
     "Hi Hafiz, I'd like to discuss a website project. Could you tell me how to get started?",
 };
