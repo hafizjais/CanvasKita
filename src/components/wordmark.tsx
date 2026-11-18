@@ -1,14 +1,20 @@
-import { BrandMark } from "@/components/brand-mark";
+import Image from "next/image";
+import { siteConfig } from "@/config/site";
 
-/** The HD mark beside "Hafiz MJ Digital", with a real space so the name reads and copies correctly. */
-export function Wordmark({ tone = "light" }: { tone?: "dark" | "light" }) {
-  const text = tone === "dark" ? "text-ink" : "text-on-dark";
+/**
+ * The "canvas kita." logo. The supplied artwork is white on a transparent
+ * background, so it suits the dark header and footer as is; `tone="dark"`
+ * turns it black for use on light backgrounds such as printed documents.
+ */
+export function Wordmark({ tone = "light", className = "h-6" }: { tone?: "dark" | "light"; className?: string }) {
   return (
-    <span className={`flex items-center gap-2.5 font-display text-[1.06rem] leading-none tracking-[-0.02em] whitespace-nowrap ${text}`}>
-      <BrandMark className="h-7 w-auto shrink-0" />
-      <span>
-        <span className="font-bold">Hafiz MJ</span> <span className="font-normal opacity-75">Digital</span>
-      </span>
-    </span>
+    <Image
+      src="/canvas-kita-logo.png"
+      alt={siteConfig.name}
+      width={871}
+      height={133}
+      priority
+      className={`w-auto ${className} ${tone === "dark" ? "brightness-0" : ""}`}
+    />
   );
 }

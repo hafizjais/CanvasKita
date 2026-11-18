@@ -1,6 +1,6 @@
-# Hafiz MJ Digital
+# Canvas Kita
 
-Portfolio and enquiry website for Hafiz MJ Digital, a freelance web design and development studio in Malaysia.
+Portfolio and enquiry website for Canvas Kita, a freelance web design and development studio in Malaysia.
 
 Built with Next.js 16 (App Router, Cache Components), React 19, TypeScript, Tailwind CSS 4 and Lucide icons. Every page is prerendered as static HTML. The enquiry form works with or without JavaScript.
 
@@ -75,7 +75,7 @@ src/
     actions/enquiry.ts       Server action: validation, spam checks, delivery
     sitemap.ts, robots.ts    SEO files
     opengraph-image.tsx      Generated social-sharing image
-    icon.svg, apple-icon.png Favicons
+    icon.png, apple-icon.png Favicons
   components/
     sections/                Hero, SelectedWork, Services, WhyWorkWithMe, Process,
                              About, Testimonials, Faq, Contact, Industries
@@ -119,7 +119,7 @@ The form validates in the browser and again on the server. It then sends the enq
 ```bash
 RESEND_API_KEY=re_...
 ENQUIRY_TO_EMAIL=you@yourdomain.com          # comma-separate several addresses
-ENQUIRY_FROM_EMAIL="Hafiz MJ Digital <enquiries@yourdomain.com>"
+ENQUIRY_FROM_EMAIL="Canvas Kita <enquiries@yourdomain.com>"
 ```
 
 Verify your sending domain in Resend first. Without a verified domain, Resend only delivers test messages to your own account address. When the visitor gives an email address, it is set as the reply-to, so you can reply directly.
@@ -162,7 +162,7 @@ Links are tracked through `data-track` attributes (see `track()` in `src/lib/ana
 
 ## SEO and indexing
 
-- The production URL comes from `NEXT_PUBLIC_SITE_URL` (e.g. `https://hafizmjdigital.com`) when set. Otherwise, on Vercel, it comes from the project's production domain, which Vercel provides automatically (`VERCEL_PROJECT_PRODUCTION_URL`).
+- The production URL comes from `NEXT_PUBLIC_SITE_URL` (e.g. `https://canvaskita.com`) when set. Otherwise, on Vercel, it comes from the project's production domain, which Vercel provides automatically (`VERCEL_PROJECT_PRODUCTION_URL`).
 - Vercel preview deployments, and builds outside Vercel without `NEXT_PUBLIC_SITE_URL`, send `noindex` and `robots.txt` disallows crawling, so test deployments stay out of search results.
 - With it: canonical URLs, Open Graph/Twitter metadata, `sitemap.xml`, and `ProfessionalService` and `FAQPage` structured data are generated. Structured data contains no ratings or reviews, and the email and phone are included only when configured.
 

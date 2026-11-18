@@ -11,14 +11,14 @@ import { packageIds, pricing } from "@/config/pricing";
 import { services } from "@/data/content";
 
 export const siteConfig = {
-  name: "Hafiz MJ Digital",
+  name: "Canvas Kita",
   ownerName: "Hafiz Jais",
   shortName: "Hafiz",
   tagline: "Your Business Deserves a Better Website.",
   description:
-    "Hafiz MJ Digital designs and builds fast, mobile-friendly business websites and lead-generation landing pages for SMEs, consultants and service businesses in Malaysia.",
+    "Canvas Kita designs and builds fast, mobile-friendly business websites and lead-generation landing pages for SMEs, consultants and service businesses in Malaysia.",
   positioning:
-    "Hafiz MJ Digital helps businesses establish a professional online presence through thoughtfully designed, fast, mobile-friendly websites built around their business goals.",
+    "Canvas Kita helps businesses establish a professional online presence through thoughtfully designed, fast, mobile-friendly websites built around their business goals.",
   areaServed: "Malaysia",
   locale: "en_MY",
 
@@ -50,7 +50,7 @@ export const siteConfig = {
 
 /**
  * Production URL without a trailing slash. Uses NEXT_PUBLIC_SITE_URL when set
- * (e.g. "https://hafizmjdigital.com"); otherwise, on Vercel, the project's
+ * (e.g. "https://canvaskita.com"); otherwise, on Vercel, the project's
  * production domain, which Vercel provides automatically. Off Vercel and
  * without the variable, the site asks search engines not to index it.
  */

@@ -26,7 +26,7 @@ export function StructuredData() {
         slogan: siteConfig.tagline,
         ...(siteUrl && {
           url: siteUrl,
-          logo: `${siteUrl}/icon.svg`,
+          logo: `${siteUrl}/icon.png`,
           image: `${siteUrl}/opengraph-image`,
         }),
         ...(email && { email }),

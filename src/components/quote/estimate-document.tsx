@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Wordmark } from "@/components/wordmark";
 import { pricing } from "@/config/pricing";
 import { siteConfig } from "@/config/site";
 import { servicePackages } from "@/data/packages";
@@ -52,9 +53,7 @@ export function EstimateDocument({
     <article className="mx-auto max-w-[180mm] bg-white text-[10.5pt] leading-normal text-ink">
       <header className="flex items-start justify-between gap-8 border-b-2 border-ink pb-5">
         <div>
-          <p className="font-display text-[16pt] leading-none">
-            <span className="font-bold">Hafiz MJ</span> <span>Digital</span>
-          </p>
+          <Wordmark tone="dark" className="h-[20pt]" />
           <p className="mt-2 text-[9pt] text-muted">{siteConfig.positioning}</p>
         </div>
         <dl className="shrink-0 text-right text-[9pt]">

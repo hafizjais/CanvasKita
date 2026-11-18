@@ -2,6 +2,7 @@ import Link from "next/link";
 import { buttonClasses } from "@/components/ui/button";
 import { MobileNav } from "@/components/mobile-nav";
 import { Wordmark } from "@/components/wordmark";
+import { siteConfig } from "@/config/site";
 import { track } from "@/lib/analytics";
 
 export const navLinks = [
@@ -16,7 +17,7 @@ export function SiteHeader() {
   return (
     <header className="on-dark sticky top-0 z-40 border-b border-on-dark/10 bg-ink/92 text-on-dark backdrop-blur-md print:hidden supports-[not(backdrop-filter:blur(0))]:bg-ink">
       <div className="container-page flex h-16 items-center justify-between gap-6">
-        <Link href="/" className="shrink-0" aria-label="Hafiz MJ Digital, home">
+        <Link href="/" className="shrink-0" aria-label={`${siteConfig.name}, home`}>
           <Wordmark />
         </Link>
 

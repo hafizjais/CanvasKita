@@ -29,7 +29,7 @@ const subscribeNoop = () => () => {};
 const webMcpTool: Record<string, string> = {
   toolname: "send_project_enquiry",
   tooldescription:
-    "Send a website project enquiry to Hafiz MJ Digital: name, contact (email or phone), website type, project description, budget and timeline.",
+    "Send a website project enquiry to Canvas Kita: name, contact (email or phone), website type, project description, budget and timeline.",
 };
 
 /**

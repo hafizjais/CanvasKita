@@ -18,7 +18,7 @@ export function About() {
           <div className="relative mx-auto max-w-[26rem] lg:mx-0">
             <Image
               src={photo}
-              alt="Hafiz, founder of Hafiz MJ Digital, walking across Tower Bridge in London"
+              alt="Hafiz, founder of Canvas Kita, walking across Tower Bridge in London"
               sizes="(min-width: 1024px) 416px, 90vw"
               placeholder="blur"
               className="aspect-[4/5] w-full rounded-2xl object-cover object-[50%_70%]"
@@ -32,7 +32,7 @@ export function About() {
           </h2>
           <div className="mt-6 max-w-2xl space-y-5 text-lg leading-relaxed text-graphite">
             <p>
-              I&rsquo;m the person behind Hafiz MJ Digital. I work with businesses to create professional websites that
+              I&rsquo;m the person behind Canvas Kita. I work with businesses to create professional websites that
               communicate their value clearly and make it easier for potential customers to take action.
             </p>
             <p>
