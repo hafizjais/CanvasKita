@@ -1,13 +1,17 @@
 import "server-only";
+import nodemailer from "nodemailer";
 import { siteConfig } from "@/config/site";
 import { budgetText, isEmail, type EnquiryValues } from "@/lib/enquiry";
 
 /**
- * Sends a form submission using whichever method is configured:
- *   1. Resend email API  (RESEND_API_KEY + ENQUIRY_TO_EMAIL [+ ENQUIRY_FROM_EMAIL])
- *   2. Webhook           (ENQUIRY_WEBHOOK_URL), e.g. Make, Zapier, n8n or a
+ * Sends a form submission using whichever method is configured, in this order:
+ *   1. SMTP              (SMTP_HOST + SMTP_USER + SMTP_PASS + ENQUIRY_TO_EMAIL
+ *                        [+ SMTP_PORT, ENQUIRY_FROM_EMAIL]), e.g. a Hostinger
+ *                        Email mailbox on smtp.hostinger.com
+ *   2. Resend email API  (RESEND_API_KEY + ENQUIRY_TO_EMAIL [+ ENQUIRY_FROM_EMAIL])
+ *   3. Webhook           (ENQUIRY_WEBHOOK_URL), e.g. Make, Zapier, n8n or a
  *                        Google Apps Script that writes to a sheet
- * If neither is set, nothing is sent and the visitor is told so.
+ * If none is set, nothing is sent and the visitor is told so.
  */
 
 export type DeliveryResult = { ok: true } | { ok: false; reason: "not_configured" | "failed" };
@@ -39,9 +43,16 @@ function asHtml(heading: string, rows: Submission["rows"]) {
   return `<h2 style="font-family:sans-serif">${escapeHtml(heading)}</h2><table style="font-family:sans-serif;font-size:15px;border-collapse:collapse">${body}</table>`;
 }
 
+function isSmtpConfigured() {
+  const { SMTP_HOST, SMTP_USER, SMTP_PASS, ENQUIRY_TO_EMAIL } = process.env;
+  return Boolean(SMTP_HOST && SMTP_USER && SMTP_PASS && ENQUIRY_TO_EMAIL);
+}
+
 export function isDeliveryConfigured() {
   return Boolean(
-    (process.env.RESEND_API_KEY && process.env.ENQUIRY_TO_EMAIL) || process.env.ENQUIRY_WEBHOOK_URL,
+    isSmtpConfigured() ||
+      (process.env.RESEND_API_KEY && process.env.ENQUIRY_TO_EMAIL) ||
+      process.env.ENQUIRY_WEBHOOK_URL,
   );
 }
 
@@ -50,6 +61,30 @@ export async function deliverSubmission(submission: Submission): Promise<Deliver
   const { subject, heading, rows, payload, contact } = submission;
 
   try {
+    if (isSmtpConfigured() && ENQUIRY_TO_EMAIL) {
+      const port = Number(process.env.SMTP_PORT) || 465;
+      const transport = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port,
+        // 465 uses implicit TLS; other ports (e.g. 587) upgrade with STARTTLS.
+        secure: port === 465,
+        auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+        connectionTimeout: 10_000,
+        greetingTimeout: 10_000,
+        socketTimeout: 15_000,
+      });
+      await transport.sendMail({
+        // The sender must be the authenticated mailbox, or Hostinger rejects the message.
+        from: ENQUIRY_FROM_EMAIL || `${siteConfig.name} <${process.env.SMTP_USER}>`,
+        to: ENQUIRY_TO_EMAIL.split(",").map((email) => email.trim()),
+        replyTo: isEmail(contact) ? contact : undefined,
+        subject,
+        text: asText(rows),
+        html: asHtml(heading, rows),
+      });
+      return { ok: true };
+    }
+
     if (RESEND_API_KEY && ENQUIRY_TO_EMAIL) {
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
