@@ -25,6 +25,13 @@ function Field(props: { id: EnquiryField; label: string; optional?: boolean; err
 
 const subscribeNoop = () => () => {};
 
+/** WebMCP form annotations (spread, as React's types don't list these attributes yet). */
+const webMcpTool: Record<string, string> = {
+  toolname: "send_project_enquiry",
+  tooldescription:
+    "Send a website project enquiry to Hafiz MJ Digital: name, contact (email or phone), website type, project description, budget and timeline.",
+};
+
 /**
  * Budget range, with an "Other" choice that reveals a box for the visitor's own amount.
  * Rendered inside the keyed form, so it resets whenever the form does.
@@ -154,6 +161,8 @@ export function EnquiryForm() {
       noValidate={enhanced}
       aria-describedby="enquiry-privacy"
       className="rounded-2xl bg-card p-6 text-ink sm:p-8"
+      // WebMCP declarative tool: lets AI agents recognise this form as "send a project enquiry".
+      {...webMcpTool}
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <Field id="name" label="Your name" error={errors.name}>

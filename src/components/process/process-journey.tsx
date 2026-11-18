@@ -152,7 +152,8 @@ export function ProcessJourney({ phases }: { phases: JourneyPhase[] }) {
                 <span className="journey-3d flex items-start justify-between px-6 pt-5">
                   <span
                     className={`font-display text-5xl leading-none font-semibold tracking-tight transition-colors ${
-                      selected ? "text-accent" : "text-ink/20"
+                      // ink/55 keeps inactive numbers muted while meeting the 3:1 contrast minimum for large text.
+                      selected ? "text-accent" : "text-ink/55"
                     }`}
                   >
                     {pad(index + 1)}

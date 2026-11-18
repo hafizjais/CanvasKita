@@ -33,15 +33,16 @@ export function Hero() {
         <div className="lg:col-span-6 xl:col-span-5">
           <h1
             id="hero-title"
-            className="animate-rise text-[2.7rem] leading-[1.02] font-semibold [animation-delay:60ms] sm:text-[3.6rem] xl:text-[4.25rem]"
+            className="text-[2.7rem] leading-[1.02] font-semibold sm:text-[3.6rem] xl:text-[4.25rem]"
           >
             Websites that make your business look the part.
           </h1>
-          <p className="mt-6 max-w-[34rem] animate-rise text-lg leading-relaxed text-on-dark-muted [animation-delay:120ms]">
+          {/* The headline and intro render immediately (no fade) so the page looks complete fast on phones. */}
+          <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-on-dark-muted">
             From business websites to lead-generation landing pages, I help businesses build a stronger online
             presence with thoughtful design, clear messaging and practical technology.
           </p>
-          <div className="mt-9 flex animate-rise flex-col gap-3 [animation-delay:180ms] xs:flex-row xs:flex-wrap">
+          <div className="mt-9 flex flex-col gap-3 motion-safe:animate-rise motion-safe:[animation-delay:60ms] xs:flex-row xs:flex-wrap">
             <Link
               href="/get-quote"
               className={buttonClasses("glow", "lg")}
@@ -60,7 +61,7 @@ export function Hero() {
             </a>
           </div>
 
-          <dl className="mt-12 grid max-w-[34rem] animate-rise grid-cols-2 gap-x-6 gap-y-5 border-t border-on-dark/12 pt-6 [animation-delay:240ms] sm:grid-cols-4">
+          <dl className="mt-12 grid max-w-[34rem] grid-cols-2 gap-x-6 gap-y-5 border-t border-on-dark/12 pt-6 motion-safe:animate-rise motion-safe:[animation-delay:120ms] sm:grid-cols-4">
             {facts.map((fact) => (
               <div key={fact.label} className="flex flex-col-reverse gap-1">
                 <dt className="text-sm text-on-dark-muted">{fact.label}</dt>

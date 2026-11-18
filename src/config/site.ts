@@ -39,6 +39,13 @@ export const siteConfig = {
 
   // Shown on the privacy page.
   privacyLastUpdated: "19 October 2026",
+  // Sent as <lastmod> in the sitemap. Update when the homepage or quote page content changes.
+  contentLastUpdated: "2026-11-18",
+
+  // How AI systems may use the site's content (robots.txt Content-Signal).
+  // search: show in search results; ai-input: use in AI answers that cite the
+  // site; ai-train: use to train AI models.
+  contentSignal: "search=yes, ai-input=yes, ai-train=no",
 } as const;
 
 /**
