@@ -94,6 +94,54 @@ export const projects: Project[] = [
     type: "own",
     images: imagesFor("financial-hafiz"),
   },
+  {
+    slug: "mapiz-autogarage",
+    name: "Mapiz Autogarage",
+    domain: "mapizautogarage.vercel.app",
+    url: "https://mapizautogarage.vercel.app",
+    category: "Automotive",
+    industry: "Car repair workshop, Taman Universiti, Skudai",
+    summary:
+      "A website for an independent car workshop covering repair, engine troubleshooting, performance work, electrical diagnostics and air-con service, with WhatsApp contact built in.",
+    type: "client",
+    images: imagesFor("mapiz-autogarage"),
+  },
+  {
+    slug: "trielle-cafe",
+    name: "Trielle Cafe",
+    domain: "triellecafe.vercel.app",
+    url: "https://triellecafe.vercel.app",
+    category: "Food & Beverage",
+    industry: "Pizza, pasta & Western cafe, Taman Universiti, Skudai",
+    summary:
+      "A cafe website showing the pizza, pasta and Western menu with opening hours and location, sending visitors to order on WhatsApp or Foodpanda.",
+    type: "client",
+    images: imagesFor("trielle-cafe"),
+  },
+  {
+    slug: "lemans-cafe",
+    name: "The Leman's Cafe",
+    domain: "lemanscafe.vercel.app",
+    url: "https://lemanscafe.vercel.app",
+    category: "Food & Beverage",
+    industry: "Neighbourhood cafe, Taman Universiti, Skudai",
+    summary:
+      "A cafe website presenting the menu concept, story, gallery and location, with an easy way to get in touch.",
+    type: "client",
+    images: imagesFor("lemans-cafe"),
+  },
+  {
+    slug: "hafiz-mj-digital",
+    name: "Hafiz MJ Digital",
+    domain: "hafizmjdigital.com",
+    url: "https://www.hafizmjdigital.com",
+    category: "Personal Portfolio",
+    industry: "Data analyst portfolio",
+    summary:
+      "A personal portfolio website for a data analyst, presenting Power BI, SQL and Python experience for Data Analyst and Business Analyst roles in Malaysia.",
+    type: "own",
+    images: imagesFor("hafiz-mj-digital"),
+  },
 ];
 
 export const projectTypeLabel = { client: "Client project", own: "Own project" } as const;
